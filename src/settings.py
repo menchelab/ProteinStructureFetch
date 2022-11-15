@@ -3,7 +3,8 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__),".."))
+sys.path.append(os.path.join(os.path.dirname(__file__),"..","alphafold_to_vrnetzer","pypi_project","src"))
+#################
 
 import os
 import shutil

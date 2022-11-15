@@ -1,2 +1,0 @@
-class StructureNotFoundError(Exception):
-    pass
