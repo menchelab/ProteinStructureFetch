@@ -18,7 +18,7 @@ from .util import time_ex
 url_prefix = "/vrprot"
 
 blueprint = flask.Blueprint(
-    "vrprot",
+    "ProteinStructureFetch",
     __name__,
     url_prefix=url_prefix,
     template_folder=st._FLASK_TEMPLATE_PATH,
