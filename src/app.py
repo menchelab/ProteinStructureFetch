@@ -15,6 +15,7 @@ from . import util, workflows
 from .util import time_ex
 
 url_prefix = "/vrprot"
+before_first_request =[util.setup]
 
 blueprint = flask.Blueprint(
     "ProteinStructureFetch",
@@ -28,7 +29,15 @@ blueprint = flask.Blueprint(
 @blueprint.route("/fetch", methods=["GET"])
 def fetch():
     """Fetches the image from the server and returns it as a response."""
-    job = time_ex(workflows.fetch, st.parser, flask.request)
+    job = time_ex(workflows.fetch_from_request, st.parser, flask.request)
+    res, runtime = job
+    res["runtime"] = f"{runtime} s"
+    return flask.jsonify(res)
+
+
+@blueprint.route("/list", methods=["GET"])
+def fetch_list():
+    job = time_ex(workflows.fetch_list_from_request, st.parser, flask.request)
     res, runtime = job
     res["runtime"] = f"{runtime} s"
     return flask.jsonify(res)
@@ -42,9 +51,4 @@ def fetch_structures_for_project():
     return flask.jsonify(res)
 
 
-@blueprint.route("/list", methods=["GET"])
-def fetch_list():
-    job = time_ex(workflows.fetch_list, st.parser, flask.request)
-    res, runtime = job
-    res["runtime"] = f"{runtime} s"
-    return flask.jsonify(res)
+

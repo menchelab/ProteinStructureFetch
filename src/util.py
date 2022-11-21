@@ -9,6 +9,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),"..","alphafold_to_vrnetz
 import time
 
 import flask
+import GlobalData as GD
 from vrprot.alphafold_db_parser import AlphafoldDBParser
 from vrprot.util import AlphaFoldVersion, ColoringModes
 
@@ -56,3 +57,9 @@ def parse_request(
         else:
             parser.alphafold_ver = AlphaFoldVersion.v4.value
     return parser
+
+def setup() -> None:
+    """ Write vrprot settings to GD.vrprot"""
+    GD.vrprot = {}
+    GD.vrprot["mode"] = st.DEFAULT_MODE
+    GD.vrprot["alphafold_ver"] = st.DEFAULT_ALPHAFOLD_VERSION
