@@ -3,13 +3,12 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__),"..","alphafold_to_vrnetzer","pypi_project","src"))
+# sys.path.append(os.path.join(os.path.dirname(__file__),"..","alphafold_to_vrnetzer","pypi_project","src"))
 #################
 import flask
+import GlobalData as GD
 from PIL import Image
 from vrprot.util import AlphaFoldVersion
-
-import GlobalData as GD
 
 from . import settings as st
 from . import util, workflows
