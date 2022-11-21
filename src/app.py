@@ -29,7 +29,7 @@ blueprint = flask.Blueprint(
 @blueprint.route("/fetch", methods=["GET"])
 def fetch():
     """Fetches the image from the server and returns it as a response."""
-    job = time_ex(workflows.fetch_from_request, st.parser, flask.request)
+    job = time_ex(workflows.fetch_from_request, flask.request,st.parser)
     res, runtime = job
     res["runtime"] = f"{runtime} s"
     return flask.jsonify(res)
@@ -37,7 +37,7 @@ def fetch():
 
 @blueprint.route("/list", methods=["GET"])
 def fetch_list():
-    job = time_ex(workflows.fetch_list_from_request, st.parser, flask.request)
+    job = time_ex(workflows.fetch_list_from_request,flask.request, st.parser)
     res, runtime = job
     res["runtime"] = f"{runtime} s"
     return flask.jsonify(res)
@@ -45,7 +45,7 @@ def fetch_list():
 
 @blueprint.route("/project", methods=["GET"])
 def fetch_structures_for_project():
-    job = time_ex(workflows.for_project, st.parser, flask.request)
+    job = time_ex(workflows.for_project, flask.request,st.parser,)
     res, runtime = job
     res["runtime"] = f"{runtime} s"
     return flask.jsonify(res)

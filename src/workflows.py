@@ -66,7 +66,7 @@ def fetch(proteins: list[str], parser: AlphafoldDBParser=st.parser):
     return {"not_fetched": parser.not_fetched, "results": result}
 
 
-def for_project(request: flask.request,parser: AlphafoldDBParser=st.parser):
+def for_project(request: flask.request, parser: AlphafoldDBParser=st.parser):
     # get information from request
     project = request.args.get("project")
     if project is None:
