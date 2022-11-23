@@ -81,6 +81,9 @@ def for_project(request: flask.request, parser: AlphafoldDBParser=st.parser):
 
     # extract node data from the projects nodes.json file
     nodes_files = os.path.join(st._PROJECTS_PATH, project, "nodes.json")
+    if not os.path.isfile(nodes_files):
+        return {"error": "Project does not exist."}
+        
     with open(nodes_files, "r") as f:
         nodes = json.load(f)["nodes"]
 
