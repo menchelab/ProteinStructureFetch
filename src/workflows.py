@@ -15,7 +15,7 @@ def get_scales(uniprot_ids=[], mode=st.DEFAULT_MODE):
     return vrprot.overview_util.get_scale(uniprot_ids, mode)
 
 
-def run_pipeline(parser: AlphafoldDBParser, proteins: list):
+def run_pipeline(proteins: list,parser: AlphafoldDBParser=st.parser):
     # create the output directory for the corresponding coloring mode if they do not exist
     output_dir = os.path.join(st._MAPS_PATH, parser.processing)
     parser.update_output_dir(output_dir)
@@ -35,8 +35,7 @@ def run_pipeline(parser: AlphafoldDBParser, proteins: list):
 
     return result
 
-
-def fetch(parser: AlphafoldDBParser, request: flask.Request):
+def fetch_from_request(request: flask.Request,parser: AlphafoldDBParser=st.parser):
     # get information from request
     pdb_id = request.args.get("id")
     if pdb_id is None:
@@ -50,14 +49,17 @@ def fetch(parser: AlphafoldDBParser, request: flask.Request):
 
     # create a list of proteins to be processed
     proteins = [pdb_id]
+    return fetch(proteins,parser)
 
+
+def fetch(proteins: list[str], parser: AlphafoldDBParser=st.parser):
     # run the batched process
-    result = run_pipeline(parser, proteins)
+    result = run_pipeline(proteins,parser)
 
     return {"not_fetched": parser.not_fetched, "results": result}
 
 
-def for_project(parser: AlphafoldDBParser, request: flask.request):
+def for_project(request: flask.request, parser: AlphafoldDBParser=st.parser):
     # get information from request
     project = request.args.get("project")
     if project is None:
@@ -79,12 +81,11 @@ def for_project(parser: AlphafoldDBParser, request: flask.request):
     proteins = [",".join(node[NT.uniprot]) for node in nodes if node.get(NT.uniprot)]
 
     # run the batched process
-    result = run_pipeline(parser, proteins)
+    result = run_pipeline(proteins, parser)
 
     return {"not_fetched": parser.not_fetched, "results": result}
 
-
-def fetch_list(parser: AlphafoldDBParser, request: flask.Request):
+def fetch_list_from_request(request: flask.Request,parser: AlphafoldDBParser=st.parser):
     # get information from request
     pdb_ids = request.args.get("ids")
     if pdb_ids is None:
@@ -99,7 +100,11 @@ def fetch_list(parser: AlphafoldDBParser, request: flask.Request):
     # create a list of proteins to be processed
     proteins = [id for id in pdb_ids.split(",")]
 
+    return fetch_list(proteins, parser)
+
+def fetch_list(proteins: list[str],parser: AlphafoldDBParser=st.parser):
+
     # run the batched process
-    result = run_pipeline(parser, proteins)
+    result = run_pipeline(proteins, parser)
 
     return {"not_fetched": parser.not_fetched, "results": result}
