@@ -4,3 +4,4 @@
 **/*.code-workspace
 **/**.vscode/
 **/**.code-workspace
+/src/__pycache__/**
