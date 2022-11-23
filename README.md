@@ -48,9 +48,9 @@ http://localhost:3000/vrprot/fetch (MacOS)
 
 You define the protein structure you want to fetch by adding:
 
-`?id=<PDB_ID>`to the URL.
+`?id=<UniProtID_ID>`to the URL.
 
-For example, to fetch the structure with the PDB ID `P68871`, you would navigate to:
+For example, to fetch the structure with the UniProt ID `P68871`, you would navigate to:
 
 http://localhost:5000/vrprot/fetch?id=P68871
 
@@ -81,7 +81,9 @@ the project with the project name `my_project`, you would navigate to:
 
 http://localhost:5000/vrprot/project?project=my_project
 
----
+Here you can also define the mode as described [above](#manually-fetch-structures.)
+
+For this to work, each node has to have a `uniprot` attribute which is a list of UniProt IDs. If a node has multiple UniProt IDs, all of them will be fetched and processed
 
 ### Fetch a list of structures
 
@@ -95,8 +97,12 @@ http://localhost:3000/vrprot/list (MacOS).
 
 You define the list of structures by adding:
 
-`?ids=<PDB_ID_1>,<PDB_ID_2>,...` to the URL.
+`?ids=<UniProtID_1>,<UniProtID_2>,...` to the URL.
 
-For example, to fetch the structures with the PDB IDs `P68871` and `P68872`, you would navigate to:
+For example, to fetch the structures with the UniProt IDs `P68871` and `P68872`, you would navigate to:
 
 http://localhost:5000/vrprot/list?ids=P68871,P68872
+
+Here you can also define the mode as described [above](#manually-fetch-structures).
+
+## **Configuration**

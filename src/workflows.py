@@ -7,7 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__),"..","alphafold_to_vrnetz
 #################
 
 import json
-
+import traceback
 import flask
 import vrprot
 from vrprot.alphafold_db_parser import AlphafoldDBParser
@@ -33,7 +33,10 @@ def run_pipeline(proteins: list,parser: AlphafoldDBParser=st.parser):
         parser.update_existence(protein)
 
     # run the batched process
-    batch([parser.fetch_pdb, parser.pdb_pipeline], proteins, parser.batch_size)
+    try:
+        batch([parser.fetch_pdb, parser.pdb_pipeline], proteins, parser.batch_size)
+    except vrprot.exceptions.ChimeraXException as e:
+        return {"error": "ChimeraX could not be found. Is it installed?"}
     result = get_scales(proteins, parser.processing)
 
     # update the existence of the processed files
