@@ -4,4 +4,4 @@
 **/*.code-workspace
 **/**.vscode/
 **/**.code-workspace
-/processing_files/**/*
+processing_files/**/**
