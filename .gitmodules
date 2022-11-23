@@ -1,3 +1,4 @@
 [submodule "alphafold_to_vrnetzer"]
 	path = alphafold_to_vrnetzer
 	url = https://github.com/menchelab/alphafold_to_vrnetzer.git
+	branch = Dev
