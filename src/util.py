@@ -1,15 +1,19 @@
-
-# TODO: REMOVE AFTER 
+# TODO: REMOVE AFTER
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__),"..","alphafold_to_vrnetzer","pypi_project","src"))
+sys.path.append(
+    os.path.join(
+        os.path.dirname(__file__), "..", "alphafold_to_vrnetzer", "pypi_project", "src"
+    )
+)
 #################
 
 import time
 
 import flask
 import GlobalData as GD
+from bs4 import BeautifulSoup as bs
 from vrprot.alphafold_db_parser import AlphafoldDBParser
 from vrprot.util import AlphaFoldVersion, ColoringModes
 
@@ -18,6 +22,7 @@ from . import settings as st
 
 def asnyc_time_ex(func, *args, **kwargs):
     import asyncio
+
     """Time the execution of a function and return the result and the time taken."""
     start = time.time()
     res = asyncio.run(func(*args, **kwargs))
@@ -58,8 +63,26 @@ def parse_request(
             parser.alphafold_ver = AlphaFoldVersion.v4.value
     return parser
 
+
 def setup() -> None:
-    """ Write vrprot settings to GD.vrprot"""
+    """Write vrprot settings to GD.vrprot"""
     GD.vrprot = {}
     GD.vrprot["mode"] = st.DEFAULT_MODE
     GD.vrprot["alphafold_ver"] = st.DEFAULT_ALPHAFOLD_VERSION
+    with open(
+        os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab_template.html"), "r"
+    ) as f:
+        soup = bs(f, "html.parser")
+
+    # Add layout options to the layout dropdown menu
+    selector = soup.find("select", {"id": "string_algo"})
+    for algo in ColoringModes:
+        algo = algo.value
+        selector.append(
+            bs(f"""<option value="{algo}">{algo}</option>""", "html.parser")
+        )
+
+    with open(
+        os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab.html"), "w"
+    ) as f:
+        f.write(str(soup.prettify()))

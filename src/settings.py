@@ -1,9 +1,12 @@
-
-# TODO: REMOVE AFTER 
+# TODO: REMOVE AFTER
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__),"..","alphafold_to_vrnetzer","pypi_project","src"))
+sys.path.append(
+    os.path.join(
+        os.path.dirname(__file__), "..", "alphafold_to_vrnetzer", "pypi_project", "src"
+    )
+)
 #################
 
 import os
@@ -37,6 +40,7 @@ parser.keep_temp = {
     FT.ply_file: False,
     FT.ascii_file: False,
 }
+parser.img_size = 256
 os.makedirs(_MAPS_PATH, exist_ok=True)
 
 

@@ -1,9 +1,12 @@
-
-# TODO: REMOVE AFTER 
+# TODO: REMOVE AFTER
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__),"..","alphafold_to_vrnetzer","pypi_project","src"))
+sys.path.append(
+    os.path.join(
+        os.path.dirname(__file__), "..", "alphafold_to_vrnetzer", "pypi_project", "src"
+    )
+)
 #################
 import flask
 import GlobalData as GD
@@ -15,8 +18,8 @@ from . import util, workflows
 from .util import time_ex
 
 url_prefix = "/vrprot"
-before_first_request =[util.setup]
-
+before_first_request = [util.setup]
+nodepanel_ppi_tabs = ["psf_nodepanel_tab_template.html"]
 blueprint = flask.Blueprint(
     "ProteinStructureFetch",
     __name__,
@@ -29,7 +32,7 @@ blueprint = flask.Blueprint(
 @blueprint.route("/fetch", methods=["GET"])
 def fetch():
     """Fetches the image from the server and returns it as a response."""
-    job = time_ex(workflows.fetch_from_request, flask.request,st.parser)
+    job = time_ex(workflows.fetch_from_request, flask.request, st.parser)
     res, runtime = job
     res["runtime"] = f"{runtime} s"
     return flask.jsonify(res)
@@ -37,7 +40,7 @@ def fetch():
 
 @blueprint.route("/list", methods=["GET"])
 def fetch_list():
-    job = time_ex(workflows.fetch_list_from_request,flask.request, st.parser)
+    job = time_ex(workflows.fetch_list_from_request, flask.request, st.parser)
     res, runtime = job
     res["runtime"] = f"{runtime} s"
     return flask.jsonify(res)
@@ -45,10 +48,11 @@ def fetch_list():
 
 @blueprint.route("/project", methods=["GET"])
 def fetch_structures_for_project():
-    job = time_ex(workflows.for_project, flask.request,st.parser,)
+    job = time_ex(
+        workflows.for_project,
+        flask.request,
+        st.parser,
+    )
     res, runtime = job
     res["runtime"] = f"{runtime} s"
     return flask.jsonify(res)
-
-
-
