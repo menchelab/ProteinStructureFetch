@@ -1,0 +1,46 @@
+<script src="{{ url_for('ProteinStructureFetch.static', filename='js/psf_util.js') }}">
+</script>
+<div id="tab_to_add" class="container" style="display:none;">
+    <div id="psf_colormode_selector">
+        <select id="psf_mode">
+        </select>
+        <div class="twelve columns">
+            <div style="min-height:50px;" id="psf_mode_update_message">
+            </div>
+        </div>
+        <script>
+            $("#psf_mode").selectmenu({
+                classes: {
+                    "ui-selectmenu-open": "twozerozero-open",
+                },
+            });
+            $('#psf_mode').on('selectmenuselect', function() {
+                var colorMode = $("#psf_mode").val();
+                var addition = "/vrprot/changeMode?mode=" + colorMode;
+                sendAjax(addition, "psf_mode_update_message");
+            });
+        </script>
+
+    </div>
+    <div id="psf_alphafold_selector">
+        <select id="psf_alphafold_ver">
+        </select>
+        <div class="twelve columns">
+            <div style="min-height:50px;" id="psf_alphafold_ver_update_message">
+            </div>
+        </div>
+        <script>
+            $("#psf_alphafold_ver").selectmenu({
+                classes: {
+                    "ui-selectmenu-open": "twozerozero-open",
+                },
+            });
+            $('#psf_alphafold_ver').on('selectmenuselect', function() {
+                var version = $("#psf_alphafold_ver").val();
+                var addition = "/vrprot/changeAFVer?ver=" + version
+                sendAjax(addition, "psf_alphafold_ver_update_message");
+            });
+        </script>
+    </div>
+    <img id="tab_img" src="{{ url_for('static', filename='img/active_protein.png') }}" style="display: none;">
+</div>

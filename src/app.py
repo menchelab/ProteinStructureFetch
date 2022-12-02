@@ -19,7 +19,7 @@ from .util import time_ex
 
 url_prefix = "/vrprot"
 before_first_request = [util.setup]
-nodepanel_ppi_tabs = ["psf_nodepanel_tab_template.html"]
+nodepanel_ppi_tabs = ["psf_nodepanel_tab.html"]
 blueprint = flask.Blueprint(
     "ProteinStructureFetch",
     __name__,
@@ -56,3 +56,17 @@ def fetch_structures_for_project():
     res, runtime = job
     res["runtime"] = f"{runtime} s"
     return flask.jsonify(res)
+
+
+@blueprint.route("/changeMode", methods=["POST"])
+def change_mode():
+    mode = flask.request.args.get("mode")
+    st.DEFAULT_MODE = mode
+    return f"<h4>Mode changed to {mode}!</h4>"
+
+
+@blueprint.route("/changeAFVer", methods=["GET", "POST"])
+def change_alphafold_ver():
+    ver = flask.request.args.get("ver")
+    st.DEFAULT_ALPHAFOLD_VERSION = ver
+    return f"<h4>AlphaFold DB version changed to {ver}!</h4>"

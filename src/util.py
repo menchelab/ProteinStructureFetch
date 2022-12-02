@@ -69,18 +69,23 @@ def setup() -> None:
     GD.vrprot = {}
     GD.vrprot["mode"] = st.DEFAULT_MODE
     GD.vrprot["alphafold_ver"] = st.DEFAULT_ALPHAFOLD_VERSION
+
     with open(
         os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab_template.html"), "r"
     ) as f:
         soup = bs(f, "html.parser")
-
     # Add layout options to the layout dropdown menu
-    selector = soup.find("select", {"id": "string_algo"})
-    for algo in ColoringModes:
-        algo = algo.value
+    selector = soup.find("select", {"id": "psf_mode"})
+    for mode in ColoringModes:
+        mode = mode.value
         selector.append(
-            bs(f"""<option value="{algo}">{algo}</option>""", "html.parser")
+            bs(f"""<option value="{mode}">{mode}</option>""", "html.parser")
         )
+    selector = soup.find("select", {"id": "psf_alphafold_ver"})
+
+    for ver in AlphaFoldVersion:
+        ver = ver.value
+        selector.append(bs(f"""<option value="{ver}">{ver}</option>""", "html.parser"))
 
     with open(
         os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab.html"), "w"
