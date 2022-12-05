@@ -32,7 +32,11 @@ DEFAULT_MODE = vrprot.util.ColoringModes.cartoons_ss_coloring.value
 DEFAULT_ALPHAFOLD_VERSION = vrprot.util.AlphaFoldVersion.v4.value
 
 
-parser = vrprot.alphafold_db_parser.AlphafoldDBParser(WD=_THIS_EXTENSION_PATH)
+parser = vrprot.alphafold_db_parser.AlphafoldDBParser(
+    WD=_THIS_EXTENSION_PATH,
+    alphafold_ver=DEFAULT_ALPHAFOLD_VERSION,
+    processing=DEFAULT_MODE,
+)
 parser.OUTPUT_DIR = _MAPS_PATH
 parser.keep_temp = {
     FT.pdb_file: False,

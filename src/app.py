@@ -61,12 +61,14 @@ def fetch_structures_for_project():
 @blueprint.route("/changeMode", methods=["POST"])
 def change_mode():
     mode = flask.request.args.get("mode")
-    st.DEFAULT_MODE = mode
+    st.parser.processing = mode
+    GD.vrprot["mode"] = mode
     return f"<h4>Mode changed to {mode}!</h4>"
 
 
 @blueprint.route("/changeAFVer", methods=["GET", "POST"])
 def change_alphafold_ver():
     ver = flask.request.args.get("ver")
-    st.DEFAULT_ALPHAFOLD_VERSION = ver
+    st.parser.alphafold_ver = ver
+    GD.vrprot["alphafold_ver"] = ver
     return f"<h4>AlphaFold DB version changed to {ver}!</h4>"
