@@ -1,123 +1,16 @@
 <script src="{{ url_for('ProteinStructureFetch.static', filename='js/psf_util.js') }}">
 </script>
-<div class="container" id="tab_to_add" style="display:none;">
- <div id="psf_colormode_selector">
-  <select id="psf_mode">
-   <option value="cartoons_ss_coloring">
-    cartoons_ss_coloring
-   </option>
-   <option value="cartoons_rainbow_coloring">
-    cartoons_rainbow_coloring
-   </option>
-   <option value="cartoons_heteroatom_coloring">
-    cartoons_heteroatom_coloring
-   </option>
-   <option value="cartoons_polymer_coloring">
-    cartoons_polymer_coloring
-   </option>
-   <option value="cartoons_chain_coloring">
-    cartoons_chain_coloring
-   </option>
-   <option value="cartoons_bFactor_coloring">
-    cartoons_bFactor_coloring
-   </option>
-   <option value="cartoons_nucleotide_coloring">
-    cartoons_nucleotide_coloring
-   </option>
-   <option value="surface_ss_cooloring">
-    surface_ss_cooloring
-   </option>
-   <option value="surface_rainbow_cooloring">
-    surface_rainbow_cooloring
-   </option>
-   <option value="surface_heteroatom_cooloring">
-    surface_heteroatom_cooloring
-   </option>
-   <option value="surface_polymer_cooloring">
-    surface_polymer_cooloring
-   </option>
-   <option value="surface_chain_cooloring">
-    surface_chain_cooloring
-   </option>
-   <option value="surface_electrostatic_coloring">
-    surface_electrostatic_coloring
-   </option>
-   <option value="surface_hydrophic_coloring">
-    surface_hydrophic_coloring
-   </option>
-   <option value="surface_bFactor_coloring">
-    surface_bFactor_coloring
-   </option>
-   <option value="stick_ss_coloring">
-    stick_ss_coloring
-   </option>
-   <option value="stick_rainbow_coloring">
-    stick_rainbow_coloring
-   </option>
-   <option value="stick_heteroatom_coloring">
-    stick_heteroatom_coloring
-   </option>
-   <option value="stick_polymer_coloring">
-    stick_polymer_coloring
-   </option>
-   <option value="stick_chain_coloring">
-    stick_chain_coloring
-   </option>
-   <option value="stick_bFactor_coloring">
-    stick_bFactor_coloring
-   </option>
-   <option value="stick_nucleotide_coloring">
-    stick_nucleotide_coloring
-   </option>
-   <option value="ball_ss_coloring">
-    ball_ss_coloring
-   </option>
-   <option value="ball_rainbow_coloring">
-    ball_rainbow_coloring
-   </option>
-   <option value="ball_heteroatom_coloring">
-    ball_heteroatom_coloring
-   </option>
-   <option value="ball_polymer_coloring">
-    ball_polymer_coloring
-   </option>
-   <option value="ball_chain_coloring">
-    ball_chain_coloring
-   </option>
-   <option value="ball_bFactor_coloring">
-    ball_bFactor_coloring
-   </option>
-   <option value="ball_nucleotide_coloring">
-    ball_nucleotide_coloring
-   </option>
-   <option value="sphere_ss_coloring">
-    sphere_ss_coloring
-   </option>
-   <option value="sphere_rainbow_coloring">
-    sphere_rainbow_coloring
-   </option>
-   <option value="sphere_heteroatom_coloring">
-    sphere_heteroatom_coloring
-   </option>
-   <option value="sphere_polymer_coloring">
-    sphere_polymer_coloring
-   </option>
-   <option value="sphere_chain_coloring">
-    sphere_chain_coloring
-   </option>
-   <option value="sphere_bFactor_coloring">
-    sphere_bFactor_coloring
-   </option>
-   <option value="sphere_nucleotide_coloring">
-    sphere_nucleotide_coloring
-   </option>
-  </select>
-  <div class="twelve columns">
-   <div id="psf_mode_update_message" style="min-height:50px;">
-   </div>
-  </div>
-  <script>
-   $("#psf_mode").selectmenu({
+<div id="tab_to_add" class="container" style="display:none;">
+    <div id="psf_colormode_selector">
+        <select id="psf_mode">
+            {% include "psf_color_modes.html" %}
+        </select>
+        <div class="twelve columns">
+            <div style="min-height:50px;" id="psf_mode_update_message">
+            </div>
+        </div>
+        <script>
+            $("#psf_mode").selectmenu({
                 classes: {
                     "ui-selectmenu-open": "twozerozero-open",
                 },
@@ -127,29 +20,19 @@
                 var addition = "/vrprot/changeMode?mode=" + colorMode;
                 sendAjax(addition, "psf_mode_update_message");
             });
-  </script>
- </div>
- <div id="psf_alphafold_selector">
-  <select id="psf_alphafold_ver">
-   <option value="v1">
-    v1
-   </option>
-   <option value="v2">
-    v2
-   </option>
-   <option value="v3">
-    v3
-   </option>
-   <option value="v4">
-    v4
-   </option>
-  </select>
-  <div class="twelve columns">
-   <div id="psf_alphafold_ver_update_message" style="min-height:50px;">
-   </div>
-  </div>
-  <script>
-   $("#psf_alphafold_ver").selectmenu({
+        </script>
+
+    </div>
+    <div id="psf_alphafold_selector">
+        <select id="psf_alphafold_ver">
+            {% include "psf_alphafold_versions.html" %}
+        </select>
+        <div class="twelve columns">
+            <div style="min-height:50px;" id="psf_alphafold_ver_update_message">
+            </div>
+        </div>
+        <script>
+            $("#psf_alphafold_ver").selectmenu({
                 classes: {
                     "ui-selectmenu-open": "twozerozero-open",
                 },
@@ -159,7 +42,7 @@
                 var addition = "/vrprot/changeAFVer?ver=" + version
                 sendAjax(addition, "psf_alphafold_ver_update_message");
             });
-  </script>
- </div>
- <img id="tab_img" src="{{ url_for('static', filename='img/active_protein.png') }}" style="display: none;"/>
+        </script>
+    </div>
+    <img id="tab_img" src="{{ url_for('static', filename='img/active_protein.png') }}" style="display: none;">
 </div>

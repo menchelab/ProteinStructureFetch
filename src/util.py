@@ -66,28 +66,30 @@ def parse_request(
 
 def setup() -> None:
     """Write vrprot settings to GD.vrprot"""
-    GD.vrprot = {}
-    GD.vrprot["mode"] = st.DEFAULT_MODE
-    GD.vrprot["alphafold_ver"] = st.DEFAULT_ALPHAFOLD_VERSION
+    vrprot_config = {}
+    vrprot_config["mode"] = st.DEFAULT_MODE
+    vrprot_config["currVer"] = st.DEFAULT_ALPHAFOLD_VERSION
+    vrprot_config["availVer"] = [ver.value for ver in AlphaFoldVersion]
+    vrprot_config["colorModes"] = [mode.value for mode in ColoringModes]
+    GD.sessionData["vrprot"] = vrprot_config
+    # with open(
+    #     os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab_template.html"), "r"
+    # ) as f:
+    #     soup = bs(f, "html.parser")
+    # # Add layout options to the layout dropdown menu
+    # selector = soup.find("select", {"id": "psf_mode"})
+    # for mode in ColoringModes:
+    #     mode = mode.value
+    #     selector.append(
+    #         bs(f"""<option value="{mode}">{mode}</option>""", "html.parser")
+    #     )
+    # selector = soup.find("select", {"id": "psf_alphafold_ver"})
 
-    with open(
-        os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab_template.html"), "r"
-    ) as f:
-        soup = bs(f, "html.parser")
-    # Add layout options to the layout dropdown menu
-    selector = soup.find("select", {"id": "psf_mode"})
-    for mode in ColoringModes:
-        mode = mode.value
-        selector.append(
-            bs(f"""<option value="{mode}">{mode}</option>""", "html.parser")
-        )
-    selector = soup.find("select", {"id": "psf_alphafold_ver"})
+    # for ver in AlphaFoldVersion:
+    #     ver = ver.value
+    #     selector.append(bs(f"""<option value="{ver}">{ver}</option>""", "html.parser"))
 
-    for ver in AlphaFoldVersion:
-        ver = ver.value
-        selector.append(bs(f"""<option value="{ver}">{ver}</option>""", "html.parser"))
-
-    with open(
-        os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab.html"), "w"
-    ) as f:
-        f.write(str(soup.prettify()))
+    # with open(
+    #     os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab.html"), "w"
+    # ) as f:
+    #     f.write(str(soup.prettify()))

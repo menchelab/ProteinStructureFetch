@@ -1,0 +1,8 @@
+<script>
+    var sessiondata = JSON.parse({{ sessionData| tojson}});
+    var vrprot = sessiondata.vrprot;
+    var versions = vrprot.availVer;
+    for (var i = 0; i < versions.length; i++) {
+        document.write("<option value=" + versions[i] + ">" + versions[i] + "</option>");
+    };
+</script>

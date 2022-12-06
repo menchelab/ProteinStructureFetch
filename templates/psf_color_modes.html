@@ -1,0 +1,8 @@
+<script>
+    var sessiondata = JSON.parse({{ sessionData| tojson}});
+    var vrprot = sessiondata.vrprot;
+    var modes = vrprot.colorModes;
+    for (var i = 0; i < modes.length; i++) {
+        document.write("<option value=" + modes[i] + ">" + modes[i] + "</option>");
+    };
+</script>

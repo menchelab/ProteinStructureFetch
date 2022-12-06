@@ -19,7 +19,7 @@ from .util import time_ex
 
 url_prefix = "/vrprot"
 before_first_request = [util.setup]
-nodepanel_ppi_tabs = ["psf_nodepanel_tab.html"]
+nodepanelppi_tabs = ["psf_nodepanel_tab.html"]
 blueprint = flask.Blueprint(
     "ProteinStructureFetch",
     __name__,
