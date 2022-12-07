@@ -62,7 +62,7 @@ def fetch_structures_for_project():
 def change_mode():
     mode = flask.request.args.get("mode")
     st.parser.processing = mode
-    GD.vrprot["mode"] = mode
+    GD.sessionData["vrprot"]["mode"] = mode
     return f"<h4>Mode changed to {mode}!</h4>"
 
 
@@ -70,5 +70,5 @@ def change_mode():
 def change_alphafold_ver():
     ver = flask.request.args.get("ver")
     st.parser.alphafold_ver = ver
-    GD.vrprot["alphafold_ver"] = ver
+    GD.sessionData["vrprot"]["alphafold_ver"] = ver
     return f"<h4>AlphaFold DB version changed to {ver}!</h4>"
