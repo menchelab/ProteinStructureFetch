@@ -1,0 +1,69 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/SwagStyle.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/UI_Module_Config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/connect_WebUI.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mc_UI_Elements.js') }}"></script>
+    <script src="{{ url_for('ProteinStructureFetch.static', filename='js/psf_util.js') }}"></script>
+</head>
+
+<body>
+    <h2 class="lineglowslow" style="font-size: 68px;margin-bottom:30px;margin-top:30px">Settings</h2>
+    <div class="container">
+        <h6>Select a coloring mode.</h6>
+        <div id="psf_colormode_selector">
+            <select id="psf_mode">
+                {% include "psf_color_modes.html" %}
+            </select>
+            <div class="twelve columns">
+                <div style="min-height:50px;" id="psf_mode_update_message">
+                </div>
+            </div>
+            <script>
+                $("#psf_mode").selectmenu({
+                    classes: {
+                        "ui-selectmenu-open": "twozerozero-open",
+                    },
+                });
+                $('#psf_mode').on('selectmenuselect', function() {
+                    var colorMode = $("#psf_mode").val();
+                    var addition = "/vrprot/changeMode?mode=" + colorMode;
+                    sendAjax(addition, "psf_mode_update_message");
+                });
+            </script>
+
+        </div>
+        <h6>Select the AlphaFold DB version.</h6>
+        <div id="psf_alphafold_selector">
+            <select id="psf_alphafold_ver">
+                {% include "psf_alphafold_versions.html" %}
+            </select>
+            <div class="twelve columns">
+                <div style="min-height:50px;" id="psf_alphafold_ver_update_message">
+                </div>
+            </div>
+            <script>
+                $("#psf_alphafold_ver").selectmenu({
+                    classes: {
+                        "ui-selectmenu-open": "twozerozero-open",
+                    },
+                });
+                $('#psf_alphafold_ver').on('selectmenuselect', function() {
+                    var version = $("#psf_alphafold_ver").val();
+                    var addition = "/vrprot/changeAFVer?ver=" + version
+                    sendAjax(addition, "psf_alphafold_ver_update_message");
+                });
+            </script>
+        </div>
+    </div>
+</body>
+
+</html>

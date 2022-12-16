@@ -8,11 +8,18 @@ function sendAjax(url_addition, message_id) {
         contentType: false,
         processData: false,
         success: function(data) {
-            $("#"+message_id).html(data);
+            $("#" + message_id).html(data);
+            setTimeout(function() {
+                $("#" + message_id).html("");
+              }, 2000);
+              
         },
         error: function(err) {
             console.log("Updating failed!");
-            $("#"+message_id).html("Updating failed!");
+            $("#" + message_id).html("Updating failed!");
+            setTimeout(function() {
+                $("#" + message_id).html("");
+              }, 2000);
         }
     });
 }

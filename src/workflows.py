@@ -19,7 +19,7 @@ from vrprot.util import AlphaFoldVersion, batch
 
 from . import settings as st
 from . import util
-from .settings import NodeTags as NT
+from .classes import NodeTags as NT
 
 
 def get_scales(uniprot_ids=[], mode=st.DEFAULT_MODE):
@@ -70,7 +70,7 @@ def fetch(proteins: list[str], parser: AlphafoldDBParser = st.parser):
     # run the batched process
     result = run_pipeline(proteins, parser)
 
-    return {"not_fetched": parser.not_fetched, "results": result}
+    return {"not_fetched": list(parser.not_fetched), "results": result}
 
 
 def for_project(request: flask.request, parser: AlphafoldDBParser = st.parser):
@@ -99,8 +99,7 @@ def for_project(request: flask.request, parser: AlphafoldDBParser = st.parser):
 
     # run the batched process
     result = run_pipeline(proteins, parser)
-
-    return {"not_fetched": parser.not_fetched, "results": result}
+    return {"not_fetched": list(parser.not_fetched), "results": result}
 
 
 def fetch_list_from_request(
@@ -128,4 +127,4 @@ def fetch_list(proteins: list[str], parser: AlphafoldDBParser = st.parser):
     # run the batched process
     result = run_pipeline(proteins, parser)
 
-    return {"not_fetched": parser.not_fetched, "results": result}
+    return {"not_fetched": list(parser.not_fetched), "results": result}

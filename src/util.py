@@ -1,4 +1,5 @@
 # TODO: REMOVE AFTER
+import configparser
 import os
 import sys
 
@@ -18,6 +19,7 @@ from vrprot.alphafold_db_parser import AlphafoldDBParser
 from vrprot.util import AlphaFoldVersion, ColoringModes
 
 from . import settings as st
+from .classes import ConfigCategories as CC
 
 
 def asnyc_time_ex(func, *args, **kwargs):
@@ -66,9 +68,10 @@ def parse_request(
 
 def setup() -> None:
     """Write vrprot settings to GD.vrprot"""
+    config = read_config()
     vrprot_config = {}
-    vrprot_config["mode"] = st.DEFAULT_MODE
-    vrprot_config["currVer"] = st.DEFAULT_ALPHAFOLD_VERSION
+    vrprot_config["mode"] = config[CC.parser][CC.ParserKeys.colorMode]
+    vrprot_config["currVer"] = config[CC.parser][CC.ParserKeys.alphafoldVersion]
     vrprot_config["availVer"] = [ver.value for ver in AlphaFoldVersion]
     vrprot_config["colorModes"] = [mode.value for mode in ColoringModes]
     GD.sessionData["vrprot"] = vrprot_config
@@ -93,3 +96,17 @@ def setup() -> None:
     #     os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab.html"), "w"
     # ) as f:
     #     f.write(str(soup.prettify()))
+
+
+def write_to_config(category: str, key: str, value: str) -> None:
+    config = configparser.ConfigParser()
+    config.read(os.path.join(st._THIS_EXTENSION_PATH, "config.ini"))
+    config[category][key] = value
+    with open(os.path.join(st._THIS_EXTENSION_PATH, "config.ini"), "w") as f:
+        config.write(f)
+
+
+def read_config() -> str:
+    config = configparser.ConfigParser()
+    config.read(os.path.join(st._THIS_EXTENSION_PATH, "config.ini"))
+    return config
