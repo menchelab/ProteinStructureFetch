@@ -46,6 +46,7 @@ def parse_request(
     """Extract processing mode and alphafold version from request."""
     mode = request.args.get("mode")
     alphafold_ver = request.args.get("ver")
+    overwrite = request.args.get("overwrite")
     if mode is None:
         mode = st.DEFAULT_MODE
     if mode not in ColoringModes.list_of_modes():
@@ -56,13 +57,20 @@ def parse_request(
     if mode is None:
         mode = st.DEFAULT_MODE
 
+    parser.overwrite = st.parser_cfg.getboolean(CC.ParserKeys.overwrite, False)
+    if overwrite:
+        if overwrite.lower() == "true":
+            parser.overwrite = True
+
     parser.processing = mode
 
     if alphafold_ver is not None:
         if alphafold_ver in AlphaFoldVersion.list_of_versions():
             parser.alphafold_ver = alphafold_ver
         else:
-            parser.alphafold_ver = AlphaFoldVersion.v4.value
+            parser.alphafold_ver = st.parser_cfg.get(
+                CC.ParserKeys.alphafoldVersion, AlphaFoldVersion.v4.value
+            )
     return parser
 
 

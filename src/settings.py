@@ -77,5 +77,6 @@ parser.keep_temp = {
     FT.ascii_file: parser_cfg.getboolean(CC.ParserKeys.keepASCII, False),
 }
 parser.img_size = parser_cfg.getint(CC.ParserKeys.imageSize, 256)
+parser.overwrite = parser_cfg.getboolean(CC.ParserKeys.overwrite, False)
 parser.OUTPUT_DIR = _MAPS_PATH
 os.makedirs(_MAPS_PATH, exist_ok=True)

@@ -14,6 +14,7 @@ class ConfigCategories:
         keepPLY = "keep PLY files"
         keepASCII = "keep ASCII Clouds"
         imageSize = "imageSize"
+        overwrite = "overwrite"
 
     class DirKeys:
         WD = "WD"
