@@ -15,7 +15,8 @@ import traceback
 import flask
 import vrprot
 from vrprot.alphafold_db_parser import AlphafoldDBParser
-from vrprot.util import AlphaFoldVersion, batch
+from vrprot.classes import AlphaFoldVersion
+from vrprot.util import batch
 
 from . import settings as st
 from . import util

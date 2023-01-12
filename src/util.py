@@ -16,7 +16,7 @@ import flask
 import GlobalData as GD
 from bs4 import BeautifulSoup as bs
 from vrprot.alphafold_db_parser import AlphafoldDBParser
-from vrprot.util import AlphaFoldVersion, ColoringModes
+from vrprot.classes import AlphaFoldVersion, ColoringModes
 
 from . import settings as st
 from .classes import ConfigCategories as CC

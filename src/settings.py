@@ -18,7 +18,7 @@ import shutil
 import sys
 
 import vrprot
-from vrprot.util import FileTypes as FT
+from vrprot.classes import FileTypes as FT
 
 _WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
 _THIS_EXTENSION_PATH = os.path.join(_WORKING_DIR, "..")
@@ -59,10 +59,10 @@ _OVERVIEW_FILE = directories.get(
 parser_cfg = config[CC.parser]
 DEFAULT_MODE = parser_cfg.get(
     CC.ParserKeys.colorMode,
-    vrprot.util.ColoringModes.cartoons_ss_coloring.value,
+    vrprot.classes.ColoringModes.cartoons_ss_coloring.value,
 )
 DEFAULT_ALPHAFOLD_VERSION = parser_cfg.get(
-    CC.ParserKeys.alphafoldVersion, vrprot.util.AlphaFoldVersion.v4.value
+    CC.ParserKeys.alphafoldVersion, vrprot.classes.AlphaFoldVersion.v4.value
 )
 parser = vrprot.alphafold_db_parser.AlphafoldDBParser(
     WD=_THIS_EXTENSION_PATH,
