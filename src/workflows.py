@@ -15,7 +15,8 @@ import traceback
 import flask
 import vrprot
 from vrprot.alphafold_db_parser import AlphafoldDBParser
-from vrprot.util import AlphaFoldVersion, batch
+from vrprot.classes import AlphaFoldVersion
+from vrprot.util import batch
 
 from . import settings as st
 from . import util
@@ -28,7 +29,8 @@ def get_scales(uniprot_ids=[], mode=st.DEFAULT_MODE):
 
 def run_pipeline(proteins: list, parser: AlphafoldDBParser = st.parser):
     # create the output directory for the corresponding coloring mode if they do not exist
-    output_dir = os.path.join(st._MAPS_PATH, parser.processing)
+    # output_dir = os.path.join(st._MAPS_PATH, parser.processing)
+    output_dir = os.path.join(st._MAPS_PATH) #TODO: REMOVE BEFRE RELEASE
     parser.update_output_dir(output_dir)
 
     # initialize the structures dictionary of the parser and check wether some processing files do already exist
