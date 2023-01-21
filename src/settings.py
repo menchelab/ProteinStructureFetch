@@ -6,9 +6,7 @@ import sys
 from .classes import ConfigCategories as CC
 
 sys.path.append(
-    os.path.join(
-        os.path.dirname(__file__), "..", "alphafold_to_vrnetzer", "pypi_project", "src"
-    )
+    os.path.join(os.path.dirname(__file__), "..", "vrprot", "pypi_project", "src")
 )
 #################
 
@@ -17,8 +15,9 @@ import os
 import shutil
 import sys
 
-import vrprot
 from vrprot.classes import FileTypes as FT
+
+import vrprot
 
 _WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
 _THIS_EXTENSION_PATH = os.path.join(_WORKING_DIR, "..")

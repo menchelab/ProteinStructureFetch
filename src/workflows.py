@@ -3,9 +3,7 @@ import os
 import sys
 
 sys.path.append(
-    os.path.join(
-        os.path.dirname(__file__), "..", "alphafold_to_vrnetzer", "pypi_project", "src"
-    )
+    os.path.join(os.path.dirname(__file__), "..", "vrprot", "pypi_project", "src")
 )
 #################
 
@@ -13,10 +11,11 @@ import json
 import traceback
 
 import flask
-import vrprot
 from vrprot.alphafold_db_parser import AlphafoldDBParser
 from vrprot.classes import AlphaFoldVersion
 from vrprot.util import batch
+
+import vrprot
 
 from . import settings as st
 from . import util
@@ -30,7 +29,7 @@ def get_scales(uniprot_ids=[], mode=st.DEFAULT_MODE):
 def run_pipeline(proteins: list, parser: AlphafoldDBParser = st.parser):
     # create the output directory for the corresponding coloring mode if they do not exist
     # output_dir = os.path.join(st._MAPS_PATH, parser.processing)
-    output_dir = os.path.join(st._MAPS_PATH) #TODO: REMOVE BEFRE RELEASE
+    output_dir = os.path.join(st._MAPS_PATH)  # TODO: REMOVE BEFRE RELEASE
     parser.update_output_dir(output_dir)
 
     # initialize the structures dictionary of the parser and check wether some processing files do already exist
