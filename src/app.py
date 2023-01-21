@@ -19,7 +19,6 @@ from . import util, workflows
 from .util import time_ex
 
 url_prefix = "/vrprot"
-before_first_request = [util.setup]
 nodepanelppi_tabs = ["psf_nodepanel_tab.html"]
 blueprint = flask.Blueprint(
     "ProteinStructureFetch",
@@ -28,6 +27,12 @@ blueprint = flask.Blueprint(
     template_folder=st._FLASK_TEMPLATE_PATH,
     static_folder=st._FLASK_STATIC_PATH,
 )
+
+
+@blueprint.before_app_first_request
+def psf_setup():
+    """Setup the extension."""
+    util.setup()
 
 
 @blueprint.route("/fetch", methods=["GET"])

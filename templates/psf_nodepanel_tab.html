@@ -1,5 +1,7 @@
 <script src="{{ url_for('ProteinStructureFetch.static', filename='js/psf_util.js') }}">
 </script>
+<link rel="stylesheet" href="{{ url_for('ProteinStructureFetch.static', filename='css/PsfStyle.css') }}">
+</script>
 <div id="tab_to_add" class="container" style="display:none;">
     <h2 class="lineglowslow" style="font-size: 68px;margin-bottom:30px;margin-top:30px">Settings</h2>
     <h6>Select a coloring mode.</h6>
@@ -14,7 +16,7 @@
         <script>
             $("#psf_mode").selectmenu({
                 classes: {
-                    "ui-selectmenu-open": "twozerozero-open",
+                    "ui-selectmenu-open": "psf-selectmenu-open",
                 },
             });
             $('#psf_mode').on('selectmenuselect', function() {
@@ -37,9 +39,10 @@
         <script>
             $("#psf_alphafold_ver").selectmenu({
                 classes: {
-                    "ui-selectmenu-open": "twozerozero-open",
+                    "ui-selectmenu-open": "psf-selectmenu-open",
                 },
             });
+
             $('#psf_alphafold_ver').on('selectmenuselect', function() {
                 var version = $("#psf_alphafold_ver").val();
                 var addition = "/vrprot/changeAFVer?ver=" + version
@@ -48,4 +51,20 @@
         </script>
     </div>
     <img id="tab_img" src="{{ url_for('static', filename='img/active_gears.png') }}" style="display: none;">
+
+    {% if "UnrealEngine" in request.user_agent|string%}
+    <!-- Larger dropdown items if in unreal -->
+    <script>
+        $("#psf_mode").selectmenu("menuWidget").menu({
+            classes: {
+                "ui-menu-item-wrapper": "psf-selectmenu-open-text"
+            },
+        });
+        $("#psf_alphafold_ver").selectmenu("menuWidget").menu({
+            classes: {
+                "ui-menu-item-wrapper": "psf-selectmenu-open-text"
+            },
+        });
+    </script>
+    {% endif %}
 </div>

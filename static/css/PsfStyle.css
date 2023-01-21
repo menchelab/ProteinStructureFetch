@@ -1,0 +1,9 @@
+.psf-selectmenu-open{
+    max-height: 50vh;
+    overflow:auto;
+}
+.ui-menu .psf-selectmenu-open-text{
+    display: block;
+    line-height: 100px;
+    font-size: 50px;
+}
