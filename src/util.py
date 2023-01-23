@@ -80,6 +80,7 @@ def setup() -> None:
     vrprot_config["currVer"] = config[CC.parser][CC.ParserKeys.alphafoldVersion]
     vrprot_config["availVer"] = [ver.value for ver in AlphaFoldVersion]
     vrprot_config["colorModes"] = [mode.value for mode in ColoringModes]
+    vrprot_config["overwrite"] = config[CC.parser][CC.ParserKeys.overwrite]
     GD.sessionData["vrprot"] = vrprot_config
     # with open(
     #     os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab_template.html"), "r"

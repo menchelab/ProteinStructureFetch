@@ -38,7 +38,8 @@ def run_pipeline(proteins: list, parser: AlphafoldDBParser = st.parser):
         parser.update_existence(protein)
     # run the batched process
     try:
-        batch([parser.fetch_pdb, parser.pdb_pipeline], proteins, parser.batch_size)
+        parser.fetch_pipeline(proteins)
+        # batch([parser.fetch_pdb, parser.pdb_pipeline], proteins, parser.batch_size)
     except vrprot.exceptions.ChimeraXException as e:
         return {"error": "ChimeraX could not be found. Is it installed?"}
     result = get_scales(proteins, parser.processing)
@@ -69,6 +70,7 @@ def fetch_from_request(request: flask.Request, parser: AlphafoldDBParser = st.pa
 
 def fetch(proteins: list[str], parser: AlphafoldDBParser = st.parser):
     # run the batched process
+    parser.not_fetched = set()
     result = run_pipeline(proteins, parser)
 
     return {"not_fetched": list(parser.not_fetched), "results": result}

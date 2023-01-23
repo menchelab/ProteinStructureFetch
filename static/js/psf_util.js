@@ -1,6 +1,7 @@
 function sendAjax(url_addition, message_id) {
     var base_url = "http://" + window.location.href.split("/")[2];
     var url = base_url + url_addition;
+    console.log(url)
     $.ajax({
         type: "POST",
         url: url,
@@ -15,11 +16,11 @@ function sendAjax(url_addition, message_id) {
               
         },
         error: function(err) {
-            console.log("Updating failed!");
+            console.log(err);
             $("#" + message_id).html("Updating failed!");
             setTimeout(function() {
                 $("#" + message_id).html("");
-              }, 2000);
+              }, 5000);
         }
     });
 }
@@ -29,4 +30,31 @@ function psf_vr_selectmenu(id) {
             "ui-menu-item-wrapper": "psf-selectmenu-open-text"
         },
     });
-}
+};
+
+function psr_write_color_modes_ver() {
+    var modes = settings.colorModes;
+    var active_mode = settings.mode;
+    for (var i = 0; i < modes.length; i++) {
+        document.write("<option value=" + modes[i] + ">" + modes[i] + "</option>");
+    };
+    $("select>option[value='" + active_mode + "']").attr("selected", true);
+};
+function psf_check_overwrite() {
+    var overwrite = settings.overwrite;
+    if (overwrite) {
+        document.getElementById("psf_overwrite").checked = true;
+    } else {
+        document.getElementById("psf_overwrite").checked = false;
+    }
+};
+
+
+function psf_write_alphafold_ver() {
+    var versions = settings.availVer;
+    var active_version = settings.currVer;
+    for (var i = 0; i < versions.length; i++) {
+        document.write("<option value=" + versions[i] + ">" + versions[i] + "</option>");
+    };
+    $("select>option[value='" + active_version + "']").attr("selected", true);
+};

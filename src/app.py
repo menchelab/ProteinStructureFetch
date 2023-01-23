@@ -35,7 +35,7 @@ def psf_setup():
     util.setup()
 
 
-@blueprint.route("/fetch", methods=["GET"])
+@blueprint.route("/fetch", methods=["GET", "POST"])
 def fetch():
     """Fetches the image from the server and returns it as a response."""
     job = time_ex(workflows.fetch_from_request, flask.request, st.parser)
@@ -118,6 +118,26 @@ def change_alphafold_ver() -> str:
     GD.sessionData["vrprot"]["currVer"] = ver
     util.write_to_config(CC.parser, CC.ParserKeys.alphafoldVersion, ver)
     return f"<h4 style='font-size: 12pt'>AlphaFold DB version changed to {ver}!</h4>"
+
+
+@blueprint.route("/settings/overwrite", methods=["GET", "POST"])
+def overwrite_settings() -> str:
+    """Turns on or off the overwrite mode.
+
+    Returns:
+        str: Message telling whether the settings change was successfully executed or not.
+    """
+    overwrite = flask.request.args.get("value")
+    if overwrite is None:
+        error = (
+            "<h4 style='color:red';>Error : No overwrite value provided</h4>"
+            + f"<h4;>Example :<a href='/vrprot/settings/overwrite?value=true'>{flask.request.base_url}/vrprot/settings/overwrite?value=true</a>"
+        )
+        return error
+    st.parser.overwrite = overwrite
+    GD.sessionData["vrprot"]["overwrite"] = overwrite
+    util.write_to_config(CC.parser, CC.ParserKeys.overwrite, overwrite)
+    return f"<h4 style='font-size: 12pt'>Overwrite set to {overwrite}!</h4>"
 
 
 @blueprint.route("/settings", methods=["GET", "POST"])

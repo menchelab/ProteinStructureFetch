@@ -2,6 +2,10 @@
 </script>
 <link rel="stylesheet" href="{{ url_for('ProteinStructureFetch.static', filename='css/PsfStyle.css') }}">
 </script>
+<script>
+    var sessiondata = JSON.parse({{ sessionData| tojson}});
+    var settings = sessiondata.vrprot
+</script>
 <div id="tab_to_add" class="container" style="display:none;">
     <h2 class="lineglowslow" style="font-size: 68px;margin-bottom:30px;margin-top:30px">Settings</h2>
     <h6>Select a coloring mode.</h6>
@@ -48,9 +52,39 @@
                 var addition = "/vrprot/changeAFVer?ver=" + version
                 sendAjax(addition, "psf_alphafold_ver_update_message");
             });
+            $("#psf_alphafold_ver").selectmenu("disable");
         </script>
     </div>
     <img id="tab_img" src="{{ url_for('static', filename='img/active_gears.png') }}" style="display: none;">
+    <div class="twelve columns" style="margin-top: 20px;">
+        <div class="frameBox two columns" id="psf_overwrite_framebox" style="min-height:66px;">
+            <h6 style="display:inline">Overwrite</h6>
+        </div>
+        <div class="frameBox one columns" id="psf_overwrite_checkbox_framebox"> <input type="checkbox"
+                id="psf_overwrite" name="psf_overwrite" class="psf_checkbox">
+        </div>
+        <div class="ninecolumns">
+        </div>
+        <div class="twelve columns">
+            <div id="psf_overwrite_message">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        psf_check_overwrite()
+        $('#psf_overwrite').change(function() {
+            var value = document.getElementById("psf_overwrite").checked;
+            console.log(value)
+            var addition = "/vrprot/settings/overwrite?value=" + value;
+            sendAjax(addition, "psf_overwrite_message");
+        });
+        $("#psf_overwrite_framebox").click(function() {
+            $("#psf_overwrite").trigger("click");
+        });
+
+    </script>
+
 
     {% if "UnrealEngine" in request.user_agent|string%}
     <!-- Larger dropdown items if in vr -->
