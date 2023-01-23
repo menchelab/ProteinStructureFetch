@@ -53,18 +53,10 @@
     <img id="tab_img" src="{{ url_for('static', filename='img/active_gears.png') }}" style="display: none;">
 
     {% if "UnrealEngine" in request.user_agent|string%}
-    <!-- Larger dropdown items if in unreal -->
+    <!-- Larger dropdown items if in vr -->
     <script>
-        $("#psf_mode").selectmenu("menuWidget").menu({
-            classes: {
-                "ui-menu-item-wrapper": "psf-selectmenu-open-text"
-            },
-        });
-        $("#psf_alphafold_ver").selectmenu("menuWidget").menu({
-            classes: {
-                "ui-menu-item-wrapper": "psf-selectmenu-open-text"
-            },
-        });
+        psf_vr_selectmenu("psf_mode");
+        psf_vr_selectmenu("psf_alphafold_ver");
     </script>
     {% endif %}
 </div>

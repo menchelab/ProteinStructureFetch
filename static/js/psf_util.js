@@ -23,3 +23,10 @@ function sendAjax(url_addition, message_id) {
         }
     });
 }
+function psf_vr_selectmenu(id) {
+    $("#"+id).selectmenu("menuWidget").menu({
+        classes: {
+            "ui-menu-item-wrapper": "psf-selectmenu-open-text"
+        },
+    });
+}
