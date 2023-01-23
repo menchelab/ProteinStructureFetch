@@ -73,7 +73,6 @@ def parse_request(
     parser.overwrite = overwrite
     parser.processing = mode
     parser.alphafold_version = alphafold_ver
-    print("Parser", parser.overwrite)
     return parser
 
 
