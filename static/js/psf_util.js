@@ -24,10 +24,27 @@ function sendAjax(url_addition, message_id) {
         }
     });
 }
+function psf_settings_selectmenus(id, addition, message_id) {
+    $("#"+id).selectmenu({
+        classes: {
+            "ui-selectmenu-open": "psf-selectmenu-open",
+        },
+    });
+    $('#'+id).on('selectmenuselect', function() {
+        var val = $("#" + id).val();
+        var url_addition = addition + val;
+        sendAjax(url_addition, message_id).done(function() {
+            socket.emit('ex', { id: id, opt: val, fn: "sel" }).fail(function() {
+                console.log("failed to send");
+            });
+        });
+    });
+}
+
 function psf_vr_selectmenu(id) {
     $("#"+id).selectmenu("menuWidget").menu({
         classes: {
-            "ui-menu-item-wrapper": "psf-selectmenu-open-text"
+            "ui-menu-item-wrapper": "psf-selectmenu-open-text",
         },
     });
 };

@@ -18,16 +18,7 @@
             </div>
         </div>
         <script>
-            $("#psf_mode").selectmenu({
-                classes: {
-                    "ui-selectmenu-open": "psf-selectmenu-open",
-                },
-            });
-            $('#psf_mode').on('selectmenuselect', function() {
-                var colorMode = $("#psf_mode").val();
-                var addition = "/vrprot/changeMode?mode=" + colorMode;
-                sendAjax(addition, "psf_mode_update_message");
-            });
+            psf_settings_selectmenus("psf_mode", "/vrprot/changeMode?mode=", "psf_mode_update_message")
         </script>
 
     </div>
@@ -41,18 +32,8 @@
             </div>
         </div>
         <script>
-            $("#psf_alphafold_ver").selectmenu({
-                classes: {
-                    "ui-selectmenu-open": "psf-selectmenu-open",
-                },
-            });
-
-            $('#psf_alphafold_ver').on('selectmenuselect', function() {
-                var version = $("#psf_alphafold_ver").val();
-                var addition = "/vrprot/changeAFVer?ver=" + version
-                sendAjax(addition, "psf_alphafold_ver_update_message");
-            });
-            $("#psf_alphafold_ver").selectmenu("disable");
+            psf_settings_selectmenus("psf_alphafold_ver", "/vrprot/changeAFVer?ver=", "psf_alphafold_ver_update_message")
+            // $("#psf_alphafold_ver").selectmenu("disable");
         </script>
     </div>
     <img id="tab_img" src="{{ url_for('static', filename='img/active_gears.png') }}" style="display: none;">
