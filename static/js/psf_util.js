@@ -2,7 +2,7 @@ function sendAjax(url_addition, message_id) {
     var base_url = "http://" + window.location.href.split("/")[2];
     var url = base_url + url_addition;
     console.log(url)
-    $.ajax({
+    return $.ajax({
         type: "POST",
         url: url,
         cache: false,
@@ -42,11 +42,12 @@ function psr_write_color_modes_ver() {
 };
 function psf_check_overwrite() {
     var overwrite = settings.overwrite;
-    if (overwrite) {
+    if (overwrite == "true") {
         document.getElementById("psf_overwrite").checked = true;
     } else {
         document.getElementById("psf_overwrite").checked = false;
     }
+    console.log( document.getElementById("psf_overwrite").checked)
 };
 
 

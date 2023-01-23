@@ -42,33 +42,38 @@ def parse_request(
     parser: AlphafoldDBParser, request: flask.Request
 ) -> AlphafoldDBParser:
     """Extract processing mode and alphafold version from request."""
+    configured_settings = GD.sessionData.get("vrprot")
     mode = request.args.get("mode")
     alphafold_ver = request.args.get("ver")
     overwrite = request.args.get("overwrite")
     if mode is None:
-        mode = st.DEFAULT_MODE
+        if configured_settings:
+            mode = configured_settings.get(CC.ParserKeys.colorMode, st.DEFAULT_MODE)
+        else:
+            mode = st.DEFAULT_MODE
     if mode not in ColoringModes.list_of_modes():
         return {
             "error": "Invalid coloring mode.",
             "possible_modes": ColoringModes.list_of_modes(),
         }
-    if mode is None:
-        mode = st.DEFAULT_MODE
 
-    parser.overwrite = st.parser_cfg.getboolean(CC.ParserKeys.overwrite, False)
-    if overwrite:
-        if overwrite.lower() == "true":
-            parser.overwrite = True
-
-    parser.processing = mode
+    if not overwrite:
+        overwrite = configured_settings.get(CC.ParserKeys.overwrite, False)
+    if overwrite.lower() == "true":
+        overwrite = True
+    else:
+        overwrite = False
 
     if alphafold_ver is not None:
-        if alphafold_ver in AlphaFoldVersion.list_of_versions():
-            parser.alphafold_ver = alphafold_ver
-        else:
-            parser.alphafold_ver = st.parser_cfg.get(
-                CC.ParserKeys.alphafoldVersion, AlphaFoldVersion.v4.value
+        if alphafold_ver not in AlphaFoldVersion.list_of_versions():
+            alphafold_ver = configured_settings.get(
+                CC.ParserKeys.alphafoldVersion, AlphaFoldVersion.v2.value
             )
+
+    parser.overwrite = overwrite
+    parser.processing = mode
+    parser.alphafold_version = alphafold_ver
+    print("Parser", parser.overwrite)
     return parser
 
 

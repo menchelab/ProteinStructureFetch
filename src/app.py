@@ -41,6 +41,8 @@ def fetch():
     job = time_ex(workflows.fetch_from_request, flask.request, st.parser)
     res, runtime = job
     res["runtime"] = f"{runtime} s"
+    if flask.request.method == "POST":
+        return flask.jsonify(res)
     return f"<h4>{res}</h4>"
 
 

@@ -17,6 +17,7 @@ from vrprot.util import batch
 
 import vrprot
 
+from . import map_uniprot
 from . import settings as st
 from . import util
 from .classes import NodeTags as NT
@@ -71,9 +72,41 @@ def fetch_from_request(request: flask.Request, parser: AlphafoldDBParser = st.pa
 def fetch(proteins: list[str], parser: AlphafoldDBParser = st.parser):
     # run the batched process
     parser.not_fetched = set()
+    parser.already_exists = set()
     result = run_pipeline(proteins, parser)
-
-    return {"not_fetched": list(parser.not_fetched), "results": result}
+    # Try whether you can find an updated UniProt id
+    second_try = {}
+    if len(parser.not_fetched) > 0:
+        mapped_ac = map_uniprot.main(
+            parser.not_fetched,
+            source_db=map_uniprot.Databases.uniprot_ac,
+            target_db=map_uniprot.Databases.uniprot,
+        )
+        for re in mapped_ac["results"]:
+            a, b = True, True
+            while a and b:
+                a = re.get("from")
+                b = re.get("to")
+                b = b.get("uniProtKBCrossReferences")
+                for entry in b:
+                    if entry.get("database") == "AlphaFoldDB":
+                        b = entry.get("id")
+                        second_try[b] = a
+                        if a in parser.not_fetched:
+                            parser.not_fetched.remove(a)
+                        break
+                break
+        result.update(run_pipeline(second_try, parser))
+        tmp = parser.not_fetched.copy()
+        for ac in tmp:
+            if ac in second_try:
+                parser.not_fetched.remove(ac)
+                parser.not_fetched.add(second_try[ac])
+    return {
+        "not_fetched": list(parser.not_fetched),
+        "already_exists": list(parser.already_processed),
+        "results": result,
+    }
 
 
 def for_project(request: flask.request, parser: AlphafoldDBParser = st.parser):
