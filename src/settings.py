@@ -68,6 +68,8 @@ parser = vrprot.alphafold_db_parser.AlphafoldDBParser(
     alphafold_ver=DEFAULT_ALPHAFOLD_VERSION,
     processing=DEFAULT_MODE,
     overview_file=_OVERVIEW_FILE,
+    images=parser_cfg.getboolean(CC.ParserKeys.thumbnails, False),
+    num_cached=parser_cfg.getint(CC.ParserKeys.numCached, None),
 )
 parser.keep_temp = {
     FT.pdb_file: parser_cfg.getboolean(CC.ParserKeys.keepPDB, False),

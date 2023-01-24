@@ -15,6 +15,8 @@ class ConfigCategories:
         keepASCII = "keep ASCII Clouds"
         imageSize = "imageSize"
         overwrite = "overwrite"
+        thumbnails = "thumbnails"
+        numCached = "num cached models"
 
     class DirKeys:
         WD = "WD"
