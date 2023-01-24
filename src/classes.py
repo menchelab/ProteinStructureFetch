@@ -25,6 +25,6 @@ class ConfigCategories:
         extensions = "extensions"
         vrnetzer = "vrnetzer"
         vrnetzerStatic = "vrnetzer static"
-        vrnetzerProjects = "vrnetzer proejcts"
+        vrnetzerProjects = "vrnetzer projects"
         maps = "maps"
         overviewFile = "overview file"
