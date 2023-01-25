@@ -72,8 +72,8 @@ function psf_settings_checkbox(id,message_id,update_val,value,addition,box) {
         var url =  addition + value;
         sendAjax(url, message_id).done(function() {
             settings_vrprot[update_val] = value
-            console.log('ex', { id: id, val: $this.is(":checked"), fn: "chk" })
-            socket.emit('ex', { id: id, val: $this.is(":checked"), fn: "chk" });
+            console.log('ex', { id: id, val: $('#'+id).is(":checked"), fn: "chk" })
+            socket.emit('ex', { id: id, val: $('#'+id).is(":checked"), fn: "chk" });
         }
         ).fail(function() {
             document.getElementById(id).checked = value;
