@@ -10,9 +10,10 @@ sys.path.append(
 )
 #################
 import flask
-import GlobalData as GD
 from PIL import Image
 from vrprot.classes import AlphaFoldVersion, ColoringModes
+
+import GlobalData as GD
 
 from . import settings as st
 from . import util, workflows
@@ -156,54 +157,4 @@ def psf_settings() -> str:
 
 @blueprint.route("/update_uniprot", methods=["GET", "POST"])
 def psf_update_uniprot() -> str:
-    """Used to update uniprot entries if they deprecated and merged to a new id.
-
-    Returns:
-        str: Message telling whether the update was successful or not.
-    """
-    old = flask.request.args.get("old")
-    uniprot = flask.request.args.get("uniprot")
-    node_id = flask.request.args.get("id")
-    project = GD.sessionData.get("actPro")
-    for var in [uniprot, node_id, project]:
-        if var is None:
-            return "Missing variable"
-    # first check in nodes.json
-    node_id = int(node_id)
-    updated = {"nodes": False, "names": False}
-    nodes_file = f"./static/projects/{project}/nodes.json"
-    names_file = f"./static/projects/{project}/names.json"
-    print(nodes_file, names_file)
-    if os.path.isfile(nodes_file):
-        print("Updating nodes.json")
-        with open(nodes_file, "r") as f:
-            nodes = json.load(f)
-            node = nodes["nodes"][node_id]
-            if "uniprot" in node:
-                for i, id in enumerate(node["uniprot"]):
-                    if id == old:
-                        node["uniprot"][i] = uniprot
-                        updated["nodes"] = True
-            if "attrlist" in node and len(node["attrlist"]) >= 2:
-                if node["attrlist"][1] == old:
-                    node["attrlist"][1] = uniprot
-                    nodes["nodes"][node_id] = node
-                    updated["nodes"] = True
-            if updated["nodes"]:
-                with open(nodes_file, "w") as f:
-                    json.dump(nodes, f)
-
-    if os.path.isfile(names_file):
-        print("Updating names.json")
-        with open(names_file, "r") as f:
-            names = json.load(f)
-            node = names["names"][node_id]
-            if len(node) >= 2:
-                if node[1] == old:
-                    node[1] = uniprot
-                    names["names"][node_id] = node
-                    updated["names"] = True
-                    with open(names_file, "w") as f:
-                        json.dump(names, f)
-
-    return json.dumps(updated)
+    util.update_uniprot(flask.request)
