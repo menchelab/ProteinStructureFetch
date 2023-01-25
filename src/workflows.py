@@ -106,6 +106,7 @@ def fetch(proteins: list[str], parser: AlphafoldDBParser = st.parser):
         "not_fetched": list(parser.not_fetched),
         "already_exists": list(parser.already_processed),
         "results": result,
+        "alternative_ids": {v: k for k, v in second_try.items()},
     }
 
 

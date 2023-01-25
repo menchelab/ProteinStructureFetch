@@ -12,7 +12,6 @@ import time
 
 import flask
 import GlobalData as GD
-from bs4 import BeautifulSoup as bs
 from vrprot.alphafold_db_parser import AlphafoldDBParser
 from vrprot.classes import AlphaFoldVersion, ColoringModes
 
@@ -80,11 +79,13 @@ def setup() -> None:
     """Write vrprot settings to GD.vrprot"""
     config = read_config()
     vrprot_config = {}
-    vrprot_config["mode"] = config[CC.parser][CC.ParserKeys.colorMode]
-    vrprot_config["currVer"] = config[CC.parser][CC.ParserKeys.alphafoldVersion]
+    vrprot_config[CC.ParserKeys.colorMode] = config[CC.parser][CC.ParserKeys.colorMode]
+    vrprot_config[CC.ParserKeys.alphafoldVersion] = config[CC.parser][
+        CC.ParserKeys.alphafoldVersion
+    ]
     vrprot_config["availVer"] = [ver.value for ver in AlphaFoldVersion]
     vrprot_config["colorModes"] = [mode.value for mode in ColoringModes]
-    vrprot_config["overwrite"] = config[CC.parser][CC.ParserKeys.overwrite]
+    vrprot_config[CC.ParserKeys.overwrite] = config[CC.parser][CC.ParserKeys.overwrite]
     GD.sessionData["vrprot"] = vrprot_config
     # with open(
     #     os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab_template.html"), "r"

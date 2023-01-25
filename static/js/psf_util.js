@@ -24,7 +24,7 @@ function sendAjax(url_addition, message_id) {
         }
     });
 }
-function psf_settings_selectmenus(id, addition, message_id) {
+function psf_settings_selectmenus(id, addition, message_id,update_val) {
     $("#"+id).selectmenu({
         classes: {
             "ui-selectmenu-open": "psf-selectmenu-open",
@@ -34,9 +34,12 @@ function psf_settings_selectmenus(id, addition, message_id) {
         var val = $("#" + id).val();
         var url_addition = addition + val;
         sendAjax(url_addition, message_id).done(function() {
-            socket.emit('ex', { id: id, opt: val, fn: "sel" }).fail(function() {
+            settings_vrprot[update_val] = val;
+            socket.emit('ex', { id: id, opt: val, fn: "sel" });
+            console.log(settings_vrprot)
+        }
+            ).fail(function() {
                 console.log("failed to send");
-            });
         });
     });
 }
@@ -49,28 +52,42 @@ function psf_vr_selectmenu(id) {
     });
 };
 
-function psr_write_color_modes_ver() {
-    var modes = settings.colorModes;
-    var active_mode = settings.mode;
+function psf_write_color_modes_ver() {
+    var modes = settings_vrprot.colorModes;
+    var active_mode = settings_vrprot.colorMode;
     for (var i = 0; i < modes.length; i++) {
         document.write("<option value=" + modes[i] + ">" + modes[i] + "</option>");
     };
     $("select>option[value='" + active_mode + "']").attr("selected", true);
 };
-function psf_check_overwrite() {
-    var overwrite = settings.overwrite;
-    if (overwrite == "true") {
-        document.getElementById("psf_overwrite").checked = true;
+function psf_settings_checkbox(id,message_id,update_val,value,addition,box) {
+    if (value == "true") {
+        document.getElementById(id).checked = true;
     } else {
-        document.getElementById("psf_overwrite").checked = false;
+        document.getElementById(id).checked = false;
     }
-    console.log( document.getElementById("psf_overwrite").checked)
+    console.log(document.getElementById(id).checked)
+    $('#'+id).change(function() {
+        var value = document.getElementById(id).checked;
+        var url =  addition + value;
+        sendAjax(url, message_id).done(function() {
+            settings_vrprot[update_val] = value
+            console.log('ex', { id: id, val: $this.is(":checked"), fn: "chk" })
+            socket.emit('ex', { id: id, val: $this.is(":checked"), fn: "chk" });
+        }
+        ).fail(function() {
+            document.getElementById(id).checked = value;
+        });
+    });
+    // $("#"+box).click(function() {
+    //     $("#"+id).trigger("click");
+    // });
 };
 
 
 function psf_write_alphafold_ver() {
-    var versions = settings.availVer;
-    var active_version = settings.currVer;
+    var versions = settings_vrprot.availVer;
+    var active_version = settings_vrprot.alphafoldVersion;
     for (var i = 0; i < versions.length; i++) {
         document.write("<option value=" + versions[i] + ">" + versions[i] + "</option>");
     };

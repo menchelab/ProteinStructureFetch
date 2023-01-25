@@ -31,7 +31,7 @@ session.mount("https://", HTTPAdapter(max_retries=retries))
 def check_response(response):
     try:
         response.raise_for_status()
-    except requests.HTTPError:
+    except requests.exceptions.HTTPError:
         print(response.json())
         raise
 
