@@ -1,7 +1,10 @@
 # TODO: REMOVE AFTER
 import configparser
+import json
 import os
 import sys
+
+import configobj
 
 sys.path.append(
     os.path.join(os.path.dirname(__file__), "..", "vrprot", "pypi_project", "src")
@@ -10,10 +13,12 @@ sys.path.append(
 
 import time
 
+import configobj
 import flask
-import GlobalData as GD
 from vrprot.alphafold_db_parser import AlphafoldDBParser
 from vrprot.classes import AlphaFoldVersion, ColoringModes
+
+import GlobalData as GD
 
 from . import settings as st
 from .classes import ConfigCategories as CC
@@ -58,8 +63,9 @@ def parse_request(
 
     if not overwrite:
         overwrite = configured_settings.get(CC.ParserKeys.overwrite, False)
-    if overwrite.lower() == "true":
-        overwrite = True
+    if isinstance(overwrite, str):
+        if overwrite.lower() == "true":
+            overwrite = True
     else:
         overwrite = False
 
@@ -77,15 +83,18 @@ def parse_request(
 
 def setup() -> None:
     """Write vrprot settings to GD.vrprot"""
-    config = read_config()
     vrprot_config = {}
-    vrprot_config[CC.ParserKeys.colorMode] = config[CC.parser][CC.ParserKeys.colorMode]
-    vrprot_config[CC.ParserKeys.alphafoldVersion] = config[CC.parser][
+    vrprot_config[CC.ParserKeys.colorMode] = st.config[CC.parser][
+        CC.ParserKeys.colorMode
+    ]
+    vrprot_config[CC.ParserKeys.alphafoldVersion] = st.config[CC.parser][
         CC.ParserKeys.alphafoldVersion
     ]
     vrprot_config["availVer"] = [ver.value for ver in AlphaFoldVersion]
     vrprot_config["colorModes"] = [mode.value for mode in ColoringModes]
-    vrprot_config[CC.ParserKeys.overwrite] = config[CC.parser][CC.ParserKeys.overwrite]
+    vrprot_config[CC.ParserKeys.overwrite] = st.config[CC.parser][
+        CC.ParserKeys.overwrite
+    ]
     GD.sessionData["vrprot"] = vrprot_config
     # with open(
     #     os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab_template.html"), "r"
@@ -111,14 +120,60 @@ def setup() -> None:
 
 
 def write_to_config(category: str, key: str, value: str) -> None:
-    config = configparser.ConfigParser()
-    config.read(os.path.join(st._THIS_EXTENSION_PATH, "config.ini"))
-    config[category][key] = value
-    with open(os.path.join(st._THIS_EXTENSION_PATH, "config.ini"), "w") as f:
-        config.write(f)
+    st.config[category][key] = value
+    st.config.validate(st.VDT)
+    st.config.write()
 
 
-def read_config() -> str:
-    config = configparser.ConfigParser()
-    config.read(os.path.join(st._THIS_EXTENSION_PATH, "config.ini"))
-    return config
+def update_uniprot(request: flask.request):
+    """Used to update uniprot entries if they deprecated and merged to a new id.
+
+    Returns:
+        str: Message telling whether the update was successful or not.
+    """
+    old = request.args.get("old")
+    uniprot = request.args.get("uniprot")
+    node_id = request.args.get("id")
+    project = GD.sessionData.get("actPro")
+    for var in [uniprot, node_id, project]:
+        if var is None:
+            return "Missing variable"
+    # first check in nodes.json
+    node_id = int(node_id)
+    updated = {"nodes": False, "names": False}
+    nodes_file = f"./static/projects/{project}/nodes.json"
+    names_file = f"./static/projects/{project}/names.json"
+    print(nodes_file, names_file)
+    if os.path.isfile(nodes_file):
+        print("Updating nodes.json")
+        with open(nodes_file, "r") as f:
+            nodes = json.load(f)
+            node = nodes["nodes"][node_id]
+            if "uniprot" in node:
+                for i, id in enumerate(node["uniprot"]):
+                    if id == old:
+                        node["uniprot"][i] = uniprot
+                        updated["nodes"] = True
+            if "attrlist" in node and len(node["attrlist"]) >= 2:
+                if node["attrlist"][1] == old:
+                    node["attrlist"][1] = uniprot
+                    nodes["nodes"][node_id] = node
+                    updated["nodes"] = True
+            if updated["nodes"]:
+                with open(nodes_file, "w") as f:
+                    json.dump(nodes, f)
+
+    if os.path.isfile(names_file):
+        print("Updating names.json")
+        with open(names_file, "r") as f:
+            names = json.load(f)
+            node = names["names"][node_id]
+            if len(node) >= 2:
+                if node[1] == old:
+                    node[1] = uniprot
+                    names["names"][node_id] = node
+                    updated["names"] = True
+                    with open(names_file, "w") as f:
+                        json.dump(names, f)
+
+    return json.dumps(updated)
