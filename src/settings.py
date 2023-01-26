@@ -15,10 +15,11 @@ import os
 import shutil
 import sys
 
-import configobj
-import vrprot
-from configobj import validate
+from configobj import ConfigObj
+from configobj.validate import Validator
 from vrprot.classes import FileTypes as FT
+
+import vrprot
 
 _WORKING_DIR = os.path.dirname(os.path.abspath(__file__))
 _THIS_EXTENSION_PATH = os.path.join(_WORKING_DIR, "..")
@@ -35,8 +36,16 @@ _OVERVIEW_FILE = os.path.join(_THIS_EXTENSION_PATH, "overview.csv")
 DEFAULT_MODE = vrprot.classes.ColoringModes.cartoons_ss_coloring.value
 DEFAULT_ALPHAFOLD_VERSION = vrprot.classes.AlphaFoldVersion.v4.value
 
-VDT = validate.Validator()
-config = configobj.ConfigObj(CONFIG_FILE, configspec=CONFIG_SPEC_FILE)
+configspec = ConfigObj(
+    CONFIG_SPEC_FILE,
+    encoding="UTF8",
+    list_values=True,
+    _inspec=True,
+    interpolation=False,
+)
+config = ConfigObj(CONFIG_FILE, configspec=configspec)
+VDT = Validator()
+config = ConfigObj(CONFIG_FILE, configspec=CONFIG_SPEC_FILE)
 config.validate(VDT, copy=True)
 config.write()
 
@@ -44,30 +53,39 @@ config.write()
 directories = config[CC.dirs]
 
 
-def get_val(var, default=None):
-    if var is None or var == "None":
-        return default
-    return var
+def remove_none(_dict):
+    """Remove None values from dict as they are saved as strings...Just why?
+    Args:
+        _dict (dict): dict that contains config values
+
+    Returns:
+        dict: cleared dict
+    """
+    for k, v in _dict.items():
+        if v is None or v == "None":
+            _dict.pop(k)
+    return _dict
 
 
-_WORKING_DIR = get_val(directories[CC.DirKeys.WD], _WORKING_DIR)
-_FLASK_TEMPLATE_PATH = get_val(
-    directories[CC.DirKeys.flaskTemplates], _FLASK_TEMPLATE_PATH
-)
+directories = remove_none(directories)
 
-_FLASK_STATIC_PATH = get_val(directories[CC.DirKeys.flaskStatic], _FLASK_STATIC_PATH)
-_EXTENSIONS_PATH = get_val(directories[CC.DirKeys.extensions], _EXTENSIONS_PATH)
-_STATIC_PATH = get_val(directories[CC.DirKeys.vrnetzerStatic], _STATIC_PATH)
-_PROJECTS_PATH = get_val(directories[CC.DirKeys.vrnetzerProjects], _PROJECTS_PATH)
-_MAPS_PATH = get_val(directories[CC.DirKeys.maps], _MAPS_PATH)
-_OVERVIEW_FILE = get_val(directories[CC.DirKeys.overviewFile], _OVERVIEW_FILE)
+_WORKING_DIR = directories.get(CC.DirKeys.WD, _WORKING_DIR)
+_FLASK_TEMPLATE_PATH = directories.get(CC.DirKeys.flaskTemplates, _FLASK_TEMPLATE_PATH)
+_FLASK_STATIC_PATH = directories.get(CC.DirKeys.flaskStatic, _FLASK_STATIC_PATH)
+_EXTENSIONS_PATH = directories.get(CC.DirKeys.extensions, _EXTENSIONS_PATH)
+_STATIC_PATH = directories.get(CC.DirKeys.flaskStatic, _STATIC_PATH)
+_PROJECTS_PATH = directories.get(CC.DirKeys.vrnetzerProjects, _PROJECTS_PATH)
+_MAPS_PATH = directories.get(CC.DirKeys.maps, _MAPS_PATH)
+_OVERVIEW_FILE = directories.get(CC.DirKeys.overviewFile, _OVERVIEW_FILE)
 # Parser settings
+
 parser_cfg = config[CC.parser]
+parser_cfg = remove_none(parser_cfg)
 
 DEFAULT_MODE = parser_cfg.get(CC.ParserKeys.colorMode)
 DEFAULT_ALPHAFOLD_VERSION = parser_cfg.get(CC.ParserKeys.alphafoldVersion)
 
-num_cached = get_val(parser_cfg[CC.ParserKeys.numCached])
+num_cached = parser_cfg.get(CC.ParserKeys.numCached)
 
 parser = vrprot.alphafold_db_parser.AlphafoldDBParser(
     WD=_THIS_EXTENSION_PATH,
@@ -83,6 +101,7 @@ parser.keep_temp = {
     FT.ply_file: parser_cfg.get(CC.ParserKeys.keepPLY),
     FT.ascii_file: parser_cfg.get(CC.ParserKeys.keepASCII),
 }
+parser.colors = parser_cfg.get(CC.ParserKeys.colors)
 parser.img_size = parser_cfg.get(CC.ParserKeys.imageSize)
 parser.overwrite = parser_cfg.get(CC.ParserKeys.overwrite)
 parser.OUTPUT_DIR = _MAPS_PATH

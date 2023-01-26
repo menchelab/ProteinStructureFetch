@@ -160,7 +160,6 @@ def fetch_list_from_request(
 
 
 def fetch_list(proteins: list[str], parser: AlphafoldDBParser = st.parser):
-
     # run the batched process
     result = run_pipeline(proteins, parser)
 

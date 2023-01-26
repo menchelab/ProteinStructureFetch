@@ -15,10 +15,9 @@ import time
 
 import configobj
 import flask
+import GlobalData as GD
 from vrprot.alphafold_db_parser import AlphafoldDBParser
 from vrprot.classes import AlphaFoldVersion, ColoringModes
-
-import GlobalData as GD
 
 from . import settings as st
 from .classes import ConfigCategories as CC
@@ -77,7 +76,7 @@ def parse_request(
 
     parser.overwrite = overwrite
     parser.processing = mode
-    parser.alphafold_version = alphafold_ver
+    parser.alphafold_ver = alphafold_ver
     return parser
 
 

@@ -10,10 +10,9 @@ sys.path.append(
 )
 #################
 import flask
+import GlobalData as GD
 from PIL import Image
 from vrprot.classes import AlphaFoldVersion, ColoringModes
-
-import GlobalData as GD
 
 from . import settings as st
 from . import util, workflows

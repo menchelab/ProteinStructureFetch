@@ -17,6 +17,7 @@ class ConfigCategories:
         overwrite = "overwrite"
         thumbnails = "thumbnails"
         numCached = "num cached models"
+        colors = "sec struc colors"
 
     class DirKeys:
         WD = "WD"
