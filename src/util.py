@@ -65,15 +65,19 @@ def parse_request(
     if isinstance(overwrite, str):
         if overwrite.lower() == "true":
             overwrite = True
-    else:
-        overwrite = False
+        else:
+            overwrite = False
 
+    default_ver = configured_settings.get(
+        CC.ParserKeys.alphafoldVersion, AlphaFoldVersion.v2.value
+    )
     if alphafold_ver is not None:
         if alphafold_ver not in AlphaFoldVersion.list_of_versions():
-            alphafold_ver = configured_settings.get(
-                CC.ParserKeys.alphafoldVersion, AlphaFoldVersion.v2.value
-            )
+            alphafold_ver = default_ver
+    else:
+        alphafold_ver = default_ver
 
+    print(overwrite)
     parser.overwrite = overwrite
     parser.processing = mode
     parser.alphafold_ver = alphafold_ver

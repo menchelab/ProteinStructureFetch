@@ -138,6 +138,7 @@ def overwrite_settings() -> str:
         return error
     st.parser.overwrite = overwrite
     GD.sessionData["vrprot"][CC.ParserKeys.overwrite] = overwrite
+    print(GD.sessionData["vrprot"][CC.ParserKeys.overwrite])
     util.write_to_config(CC.parser, CC.ParserKeys.overwrite, overwrite)
     return f"<h4 style='font-size: 12pt'>Overwrite set to {overwrite}!</h4>"
 

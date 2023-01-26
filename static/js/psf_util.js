@@ -60,8 +60,9 @@ function psf_write_color_modes_ver() {
     };
     $("select>option[value='" + active_mode + "']").attr("selected", true);
 };
-function psf_settings_checkbox(id,message_id,update_val,value,addition,box) {
-    if (value == "true") {
+function psf_settings_checkbox(id, message_id, update_val, value, addition, box) {
+    console.log(value)
+    if (value.toString().toLowerCase() == "true") {
         document.getElementById(id).checked = true;
     } else {
         document.getElementById(id).checked = false;
