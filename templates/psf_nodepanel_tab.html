@@ -16,7 +16,7 @@
             </script>
         </select>
         <div class="twelve columns">
-            <div id="psf_mode_update_message">
+            <div id="psf_mode_update_message" class="psf_updateMessage">
             </div>
         </div>
         <script>
@@ -32,7 +32,7 @@
             </script>
         </select>
         <div class="twelve columns">
-            <div id="psf_alphafold_ver_update_message">
+            <div id="psf_alphafold_ver_update_message" class="psf_updateMessage">
             </div>
         </div>
         <script>
@@ -42,7 +42,7 @@
         </script>
     </div>
     <img id="tab_img" src="{{ url_for('static', filename='img/active_gears.png') }}" style="display: none;">
-    <div class="twelve columns" style="margin-top: 20px;">
+    <div class="twelve columns">
         <div class="frameBox three columns" id="psf_overwrite_framebox" style="height:88px;width:fit-content">
             <h6 style="font-size:25px;">Overwrite</h6>
         </div>
@@ -53,7 +53,7 @@
         <div class="ninecolumns">
         </div>
         <div class="twelve columns">
-            <div id="psf_overwrite_message">
+            <div id="psf_overwrite_message" class="psf_updateMessage">
             </div>
         </div>
     </div>
@@ -61,6 +61,10 @@
     <script>
         psf_settings_checkbox("psf_overwrite", "psf_overwrite_message", "overwrite", settings_vrprot.overwrite, "/vrprot/settings/overwrite?value=", "psf_overwrite_checkbox_framebox")
         console.log("settings_vrprot.overwrite: " + settings_vrprot.overwrite)
+
+        var myTab = document.getElementById("psf_colormode_selector").parentNode;
+        if (typeof uniprot_ids === "undefined")
+            myTab.remove();
     </script>
 
 
@@ -69,6 +73,7 @@
     <script>
         psf_vr_selectmenu("psf_mode");
         psf_vr_selectmenu("psf_alphafold_ver");
+
     </script>
     {% endif %}
 </div>

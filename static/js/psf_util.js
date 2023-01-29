@@ -9,17 +9,19 @@ function sendAjax(url_addition, message_id) {
         contentType: false,
         processData: false,
         success: function(data) {
-            $("#" + message_id).html(data);
+            $("#" + message_id).text(data);
+            $("#" + message_id).css("opacity","1")
             setTimeout(function() {
-                $("#" + message_id).html("");
-              }, 2000);
+                $("#" + message_id).css("opacity","0");
+              }, 5000);
               
         },
         error: function(err) {
             console.log(err);
-            $("#" + message_id).html("Updating failed!");
+            $("#" + message_id).text("Updating failed!");
+            $("#" + message_id).css("opacity","1")
             setTimeout(function() {
-                $("#" + message_id).html("");
+                $("#" + message_id).css("opacity", "0");
               }, 5000);
         }
     });

@@ -97,7 +97,7 @@ def change_mode() -> str:
     st.parser.processing = mode
     GD.sessionData["vrprot"][CC.ParserKeys.colorMode] = mode
     util.write_to_config(CC.parser, CC.ParserKeys.colorMode, mode)
-    return f"<h4 style='font-size: 12pt'>Mode changed to {mode}!</h4>"
+    return f"Mode changed to {mode}!"
 
 
 @blueprint.route("/changeAFVer", methods=["GET", "POST"])
@@ -119,7 +119,7 @@ def change_alphafold_ver() -> str:
     st.parser.alphafold_ver = ver
     GD.sessionData["vrprot"][CC.ParserKeys.alphafoldVersion] = ver
     util.write_to_config(CC.parser, CC.ParserKeys.alphafoldVersion, ver)
-    return f"<h4 style='font-size: 12pt'>AlphaFold DB version changed to {ver}!</h4>"
+    return f"AlphaFold DB version changed to {ver}!"
 
 
 @blueprint.route("/settings/overwrite", methods=["GET", "POST"])
@@ -140,7 +140,7 @@ def overwrite_settings() -> str:
     GD.sessionData["vrprot"][CC.ParserKeys.overwrite] = overwrite
     print(GD.sessionData["vrprot"][CC.ParserKeys.overwrite])
     util.write_to_config(CC.parser, CC.ParserKeys.overwrite, overwrite)
-    return f"<h4 style='font-size: 12pt'>Overwrite set to {overwrite}!</h4>"
+    return f"Overwrite set to {overwrite}!"
 
 
 @blueprint.route("/settings", methods=["GET", "POST"])
