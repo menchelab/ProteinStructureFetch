@@ -20,7 +20,10 @@ from .util import time_ex
 
 url_prefix = "/vrprot"
 nodepanelppi_tabs = ["psf_nodepanel_tab.html"]
-blueprint = flask.Blueprint(
+
+from io_blueprint import IOBlueprint
+
+blueprint = IOBlueprint(
     "ProteinStructureFetch",
     __name__,
     url_prefix=url_prefix,
@@ -138,7 +141,6 @@ def overwrite_settings() -> str:
         return error
     st.parser.overwrite = overwrite
     GD.sessionData["vrprot"][CC.ParserKeys.overwrite] = overwrite
-    print(GD.sessionData["vrprot"][CC.ParserKeys.overwrite])
     util.write_to_config(CC.parser, CC.ParserKeys.overwrite, overwrite)
     return f"Overwrite set to {overwrite}!"
 

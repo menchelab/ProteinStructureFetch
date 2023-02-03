@@ -105,5 +105,4 @@ parser.colors = parser_cfg.get(CC.ParserKeys.colors)
 parser.img_size = parser_cfg.get(CC.ParserKeys.imageSize)
 parser.overwrite = parser_cfg.get(CC.ParserKeys.overwrite)
 parser.OUTPUT_DIR = _MAPS_PATH
-print(parser.overwrite)
 os.makedirs(_MAPS_PATH, exist_ok=True)
