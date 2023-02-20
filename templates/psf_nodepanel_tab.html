@@ -1,10 +1,9 @@
 <script src="{{ url_for('ProteinStructureFetch.static', filename='js/psf_util.js') }}">
 </script>
-<link rel="stylesheet" href="{{ url_for('ProteinStructureFetch.static', filename='css/PsfStyle.css') }}">
 </script>
 <script>
-    var sessiondata = JSON.parse({{ sessionData| tojson}});
-    var settings_vrprot = sessiondata.vrprot
+    var sessionData = JSON.parse({{ sessionData| tojson}});
+    var settings_vrprot = sessionData.vrprot
 </script>
 <div id="tab_to_add" class="container" style="display:none;">
     <h2 class="lineglowslow" style="font-size: 68px;margin-bottom:30px;margin-top:30px">Settings</h2>
@@ -16,7 +15,7 @@
             </script>
         </select>
         <div class="twelve columns">
-            <div id="psf_mode_update_message" class="psf_updateMessage">
+            <div id="psf_mode_update_message" class="updateMessage">
             </div>
         </div>
         <script>
@@ -32,7 +31,7 @@
             </script>
         </select>
         <div class="twelve columns">
-            <div id="psf_alphafold_ver_update_message" class="psf_updateMessage">
+            <div id="psf_alphafold_ver_update_message" class="updateMessage">
             </div>
         </div>
         <script>
@@ -48,12 +47,12 @@
         </div>
         <div class="frameBox one columns" id="psf_overwrite_checkbox_framebox"
             style="height: 88px;width: 88px;max-height:88px;padding:7px"> <input type="checkbox" id="psf_overwrite"
-                name="psf_overwrite" class="psf_checkbox">
+                name="psf_overwrite" class="vr_checkbox">
         </div>
         <div class="ninecolumns">
         </div>
         <div class="twelve columns">
-            <div id="psf_overwrite_message" class="psf_updateMessage">
+            <div id="psf_overwrite_message" class="updateMessage">
             </div>
         </div>
     </div>

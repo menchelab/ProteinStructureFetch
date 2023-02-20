@@ -1,98 +1,108 @@
 function sendAjax(url_addition, message_id) {
-    var base_url = "http://" + window.location.href.split("/")[2];
-    var url = base_url + url_addition;
-    console.log(url)
-    return $.ajax({
-        type: "POST",
-        url: url,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function(data) {
-            $("#" + message_id).text(data);
-            $("#" + message_id).css("opacity","1")
-            setTimeout(function() {
-                $("#" + message_id).css("opacity","0");
-              }, 5000);
-              
-        },
-        error: function(err) {
-            console.log(err);
-            $("#" + message_id).text("Updating failed!");
-            $("#" + message_id).css("opacity","1")
-            setTimeout(function() {
-                $("#" + message_id).css("opacity", "0");
-              }, 5000);
-        }
-    });
+  var base_url = "http://" + window.location.href.split("/")[2];
+  var url = base_url + url_addition;
+  console.log(url);
+  $.ajax({
+    type: "POST",
+    url: url,
+    cache: false,
+    contentType: false,
+    processData: false,
+    success: function (data) {
+      setStatus("success", message_id, data);
+    },
+    error: function (err) {
+      setStatus("error", message_id, "Updating failed!");
+    },
+  });
 }
-function psf_settings_selectmenus(id, addition, message_id,update_val) {
-    $("#"+id).selectmenu({
-        classes: {
-            "ui-selectmenu-open": "psf-selectmenu-open",
-        },
-    });
-    $('#'+id).on('selectmenuselect', function() {
-        var val = $("#" + id).val();
-        var url_addition = addition + val;
-        sendAjax(url_addition, message_id).done(function() {
-            settings_vrprot[update_val] = val;
-            socket.emit('ex', { id: id, opt: val, fn: "sel" });
-            console.log(settings_vrprot)
-        }
-            ).fail(function() {
-                console.log("failed to send");
-        });
-    });
+function psf_settings_selectmenus(id, addition, message_id, update_val) {
+  $("#" + id).selectmenu({
+    classes: {
+      "ui-selectmenu-open": "limited-selectmenu-open",
+    },
+  });
+  $("#" + id).on("selectmenuselect", function () {
+    var val = $("#" + id).val();
+    var url_addition = addition + val;
+    sendAjax(url_addition, message_id)
+      .done(function () {
+        settings_vrprot[update_val] = val;
+        socket.emit("ex", { id: id, opt: val, fn: "sel" });
+        console.log(settings_vrprot);
+      })
+      .fail(function () {
+        console.log("failed to send");
+      });
+  });
 }
 
 function psf_vr_selectmenu(id) {
-    $("#"+id).selectmenu("menuWidget").menu({
-        classes: {
-            "ui-menu-item-wrapper": "psf-selectmenu-open-text",
-        },
+  $("#" + id)
+    .selectmenu("menuWidget")
+    .menu({
+      classes: {
+        "ui-menu-item-wrapper": "limited-selectmenu-open-text",
+      },
     });
-};
+}
 
 function psf_write_color_modes_ver() {
-    var modes = settings_vrprot.colorModes;
-    var active_mode = settings_vrprot.colorMode;
-    for (var i = 0; i < modes.length; i++) {
-        document.write("<option value=" + modes[i] + ">" + modes[i] + "</option>");
-    };
-    $("select>option[value='" + active_mode + "']").attr("selected", true);
-};
-function psf_settings_checkbox(id, message_id, update_val, value, addition, box) {
-    console.log(value)
-    if (value.toString().toLowerCase() == "true") {
-        document.getElementById(id).checked = true;
-    } else {
-        document.getElementById(id).checked = false;
-    }
-    console.log(document.getElementById(id).checked)
-    $('#'+id).change(function() {
-        var value = document.getElementById(id).checked;
-        var url =  addition + value;
-        sendAjax(url, message_id).done(function() {
-            settings_vrprot[update_val] = value
-            console.log('ex', { id: id, val: $('#'+id).is(":checked"), fn: "chk" })
-            socket.emit('ex', { id: id, val: $('#'+id).is(":checked"), fn: "chk" });
-        }
-        ).fail(function() {
-            document.getElementById(id).checked = value;
+  var modes = settings_vrprot.colorModes;
+  var active_mode = settings_vrprot.colorMode;
+  for (var i = 0; i < modes.length; i++) {
+    document.write("<option value=" + modes[i] + ">" + modes[i] + "</option>");
+  }
+  $("select>option[value='" + active_mode + "']").attr("selected", true);
+}
+function psf_settings_checkbox(
+  id,
+  message_id,
+  update_val,
+  value,
+  addition,
+  box
+) {
+  console.log(value);
+  if (value.toString().toLowerCase() == "true") {
+    document.getElementById(id).checked = true;
+  } else {
+    document.getElementById(id).checked = false;
+  }
+  console.log(document.getElementById(id).checked);
+  $("#" + id).change(function () {
+    var value = document.getElementById(id).checked;
+    var url = addition + value;
+    sendAjax(url, message_id)
+      .done(function () {
+        settings_vrprot[update_val] = value;
+        console.log("ex", {
+          id: id,
+          val: $("#" + id).is(":checked"),
+          fn: "chk",
         });
-    });
-    // $("#"+box).click(function() {
-    //     $("#"+id).trigger("click");
-    // });
-};
-
+        socket.emit("ex", {
+          id: id,
+          val: $("#" + id).is(":checked"),
+          fn: "chk",
+        });
+      })
+      .fail(function () {
+        document.getElementById(id).checked = value;
+      });
+  });
+  // $("#"+box).click(function() {
+  //     $("#"+id).trigger("click");
+  // });
+}
 
 function psf_write_alphafold_ver() {
-    var versions = settings_vrprot.availVer;
-    var active_version = settings_vrprot.alphafoldVersion;
-    for (var i = 0; i < versions.length; i++) {
-        document.write("<option value=" + versions[i] + ">" + versions[i] + "</option>");
-    };
-    $("select>option[value='" + active_version + "']").attr("selected", true);
-};
+  var versions = settings_vrprot.availVer;
+  var active_version = settings_vrprot.alphafoldVersion;
+  for (var i = 0; i < versions.length; i++) {
+    document.write(
+      "<option value=" + versions[i] + ">" + versions[i] + "</option>"
+    );
+  }
+  $("select>option[value='" + active_version + "']").attr("selected", true);
+}

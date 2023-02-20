@@ -32,7 +32,6 @@ def check_response(response):
     try:
         response.raise_for_status()
     except requests.exceptions.HTTPError:
-        print(response.json())
         raise
 
 
