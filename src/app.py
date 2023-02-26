@@ -159,4 +159,4 @@ def psf_settings() -> str:
 
 @blueprint.route("/update_uniprot", methods=["GET", "POST"])
 def psf_update_uniprot() -> str:
-    util.update_uniprot(flask.request)
+    return util.update_uniprot(flask.request)

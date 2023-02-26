@@ -145,7 +145,6 @@ def update_uniprot(request: flask.request):
     updated = {"nodes": False, "names": False}
     nodes_file = f"./static/projects/{project}/nodes.json"
     names_file = f"./static/projects/{project}/names.json"
-    print(nodes_file, names_file)
     if os.path.isfile(nodes_file):
         print("Updating nodes.json")
         with open(nodes_file, "r") as f:

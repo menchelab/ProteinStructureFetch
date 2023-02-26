@@ -1,4 +1,4 @@
-function sendAjax(url_addition, message_id) {
+function sendAjax(url_addition, message_id, doneFunction, failFunction) {
   var base_url = "http://" + window.location.href.split("/")[2];
   var url = base_url + url_addition;
   console.log(url);
@@ -10,9 +10,15 @@ function sendAjax(url_addition, message_id) {
     processData: false,
     success: function (data) {
       setStatus("success", message_id, data);
+      if (doneFunction != undefined) {
+        doneFunction();
+      }
     },
     error: function (err) {
       setStatus("error", message_id, "Updating failed!");
+      if (failFunction != undefined) {
+        failFunction();
+      }
     },
   });
 }
@@ -25,15 +31,15 @@ function psf_settings_selectmenus(id, addition, message_id, update_val) {
   $("#" + id).on("selectmenuselect", function () {
     var val = $("#" + id).val();
     var url_addition = addition + val;
-    sendAjax(url_addition, message_id)
-      .done(function () {
-        settings_vrprot[update_val] = val;
-        socket.emit("ex", { id: id, opt: val, fn: "sel" });
-        console.log(settings_vrprot);
-      })
-      .fail(function () {
-        console.log("failed to send");
-      });
+    function doneFunction() {
+      settings_vrprot[update_val] = val;
+      socket.emit("ex", { id: id, opt: val, fn: "sel" });
+      console.log(settings_vrprot);
+    }
+    function failFunction() {
+      console.log("failed to send");
+    }
+    sendAjax(url_addition, message_id, doneFunction, failFunction);
   });
 }
 
