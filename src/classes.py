@@ -18,6 +18,7 @@ class ConfigCategories:
         thumbnails = "thumbnails"
         numCached = "num cached models"
         colors = "sec struc colors"
+        logLevel = "log level"
 
     class DirKeys:
         WD = "WD"

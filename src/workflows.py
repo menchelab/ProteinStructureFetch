@@ -27,7 +27,7 @@ def get_scales(uniprot_ids=[], mode=st.DEFAULT_MODE):
     return vrprot.overview_util.get_scale(uniprot_ids, mode)
 
 
-def run_pipeline(proteins: list, parser: AlphafoldDBParser = st.parser):
+def run_pipeline(proteins: list, parser: AlphafoldDBParser = st.parser, **kwargs):
     # create the output directory for the corresponding coloring mode if they do not exist
     # output_dir = os.path.join(st._MAPS_PATH, parser.processing)
     output_dir = os.path.join(st._MAPS_PATH)  # TODO: REMOVE BEFRE RELEASE
@@ -39,7 +39,7 @@ def run_pipeline(proteins: list, parser: AlphafoldDBParser = st.parser):
         parser.update_existence(protein)
     # run the batched process
     try:
-        parser.fetch_pipeline(proteins)
+        parser.fetch_pipeline(proteins, **kwargs)
         # batch([parser.fetch_pdb, parser.pdb_pipeline], proteins, parser.batch_size)
     except vrprot.exceptions.ChimeraXException as e:
         return {"error": "ChimeraX could not be found. Is it installed?"}
@@ -138,7 +138,7 @@ def for_project(request: flask.request, parser: AlphafoldDBParser = st.parser):
     proteins = [",".join(node[NT.uniprot]) for node in nodes if node.get(NT.uniprot)]
 
     # run the batched process
-    result = run_pipeline(proteins, parser)
+    result = run_pipeline(proteins, parser, on_demand=False)
     return {"not_fetched": list(parser.not_fetched), "results": result}
 
 
@@ -164,6 +164,6 @@ def fetch_list_from_request(
 
 def fetch_list(proteins: list[str], parser: AlphafoldDBParser = st.parser):
     # run the batched process
-    result = run_pipeline(proteins, parser)
+    result = run_pipeline(proteins, parser, on_demand=False)
 
     return {"not_fetched": list(parser.not_fetched), "results": result}
