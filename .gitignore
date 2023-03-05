@@ -7,6 +7,6 @@
 processing_files/**/**
 static/combined/*
 static/pdbs/*
-static/UP000000805_243232_METJA_v4_Kopie.tar
 config.ini
 venv/*
+**.tar
