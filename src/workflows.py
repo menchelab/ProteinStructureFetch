@@ -12,8 +12,6 @@ import traceback
 
 import flask
 from vrprot.alphafold_db_parser import AlphafoldDBParser
-from vrprot.classes import AlphaFoldVersion
-from vrprot.util import batch
 
 import vrprot
 
@@ -56,7 +54,10 @@ def fetch_from_request(request: flask.Request, parser: AlphafoldDBParser = st.pa
     # get information from request
     pdb_id = request.args.get("id")
     if pdb_id is None:
-        return {"error": "No PDB ID provided."}
+        return {
+            "error": "No PDB ID provided.",
+            "example": "http://localhost:5000/vrprot/fetch?id=1a0j",
+        }
 
     # extract processing mode and alphafold version from request
     parser = util.parse_request(parser, request)
@@ -113,9 +114,11 @@ def fetch(proteins: list[str], parser: AlphafoldDBParser = st.parser):
     }
 
 
-def for_project(request: flask.request, parser: AlphafoldDBParser = st.parser):
+def for_project(
+    project: str, request: flask.request, parser: AlphafoldDBParser = st.parser
+):
     # get information from request
-    project = request.args.get("project")
+
     if project is None:
         return {"error": "No project provided."}
 
@@ -148,7 +151,10 @@ def fetch_list_from_request(
     # get information from request
     pdb_ids = request.args.get("ids")
     if pdb_ids is None:
-        return {"error": "No PDB IDs provided."}
+        return {
+            "error": "No PDB IDs provided.",
+            "example": f"http://{request.host}/vrprot/list?ids=P02655,At1g58602",
+        }
 
     # extract processing mode and alphafold version from request
     parser = util.parse_request(parser, request)

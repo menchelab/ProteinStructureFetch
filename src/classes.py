@@ -19,6 +19,7 @@ class ConfigCategories:
         numCached = "num cached models"
         colors = "sec struc colors"
         logLevel = "log level"
+        parallel = "parallel processing"
 
     class DirKeys:
         WD = "WD"

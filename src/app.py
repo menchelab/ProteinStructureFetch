@@ -62,16 +62,16 @@ def fetch_list() -> flask.Response:
     return flask.jsonify(res)
 
 
-@blueprint.route("/project", methods=["GET"])
-def fetch_structures_for_project() -> flask.Response:
+@blueprint.route("/project/<project>", methods=["GET"])
+def fetch_structures_for_project(project) -> flask.Response:
     """Will fetch all protein structures for a certain project. The nodes in the nodes.json file of this project have to have the "uniprot" key with a list of protein structures as values.
 
     Returns:
         flask.Response: Report the missing, and fetched structures, as well as the runtime.
     """
-
     job = time_ex(
         workflows.for_project,
+        project,
         flask.request,
         st.parser,
     )
