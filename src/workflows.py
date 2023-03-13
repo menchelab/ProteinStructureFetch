@@ -56,7 +56,7 @@ def fetch_from_request(request: flask.Request, parser: AlphafoldDBParser = st.pa
     if pdb_id is None:
         return {
             "error": "No PDB ID provided.",
-            "example": "http://localhost:5000/vrprot/fetch?id=1a0j",
+            "example": f"{request.host}/vrprot/fetch?id=P69905",
         }
 
     # extract processing mode and alphafold version from request

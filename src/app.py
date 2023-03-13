@@ -5,9 +5,7 @@ import sys
 
 from .classes import ConfigCategories as CC
 
-sys.path.append(
-    os.path.join(os.path.dirname(__file__), "..", "vrprot", "pypi_project", "src")
-)
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "vrprot", "src"))
 #################
 import flask
 import GlobalData as GD
