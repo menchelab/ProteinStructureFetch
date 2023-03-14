@@ -1,19 +1,6 @@
-# TODO: REMOVE AFTER
-import configparser
 import json
 import os
-import sys
-
-import configobj
-
-sys.path.append(
-    os.path.join(os.path.dirname(__file__), "..", "vrprot", "pypi_project", "src")
-)
-#################
-
 import time
-
-import configobj
 import flask
 import GlobalData as GD
 from vrprot.alphafold_db_parser import AlphafoldDBParser

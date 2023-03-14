@@ -1,19 +1,7 @@
-# TODO: REMOVE AFTER
-import ast
 import os
-import sys
 
 from .classes import ConfigCategories as CC
-
-sys.path.append(
-    os.path.join(os.path.dirname(__file__), "..", "vrprot", "pypi_project", "src")
-)
-#################
-
-import configparser
 import os
-import shutil
-import sys
 
 from configobj import ConfigObj
 from configobj.validate import Validator
