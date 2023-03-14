@@ -5,3 +5,6 @@
 **/**.vscode/
 **/**.code-workspace
 /src/__pycache__/**
+**.tar
+/venv
+config.ini
