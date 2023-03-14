@@ -5,13 +5,12 @@ import sys
 
 from .classes import ConfigCategories as CC
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "..", "vrprot", "src"))
 #################
 import flask
 import GlobalData as GD
 from PIL import Image
 from vrprot.classes import AlphaFoldVersion, ColoringModes
-
+from io_blueprint import IOBlueprint
 from . import settings as st
 from . import util, workflows
 from .util import time_ex
@@ -19,7 +18,6 @@ from .util import time_ex
 url_prefix = "/vrprot"
 nodepanelppi_tabs = ["psf_nodepanel_tab.html"]
 
-from io_blueprint import IOBlueprint
 
 blueprint = IOBlueprint(
     "ProteinStructureFetch",

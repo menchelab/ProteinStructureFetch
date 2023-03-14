@@ -1,4 +1,0 @@
-[submodule "vrprot"]
-	path = vrprot
-	url = https://github.com/menchelab/vrprot.git
-	branch = Dev

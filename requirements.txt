@@ -13,3 +13,4 @@ trimesh==3.15.3
 urllib3==1.26.12
 configobj
 pyglet<2.0
+vrprot
