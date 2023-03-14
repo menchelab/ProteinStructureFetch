@@ -1,9 +1,6 @@
 import os
 
 from .classes import ConfigCategories as CC
-
-#################
-
 import os
 
 from configobj import ConfigObj

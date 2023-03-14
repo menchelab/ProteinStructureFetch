@@ -1,8 +1,6 @@
 import json
 import os
-
 import time
-
 import flask
 import GlobalData as GD
 from vrprot.alphafold_db_parser import AlphafoldDBParser
