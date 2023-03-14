@@ -4,7 +4,9 @@
 **/*.code-workspace
 **/**.vscode/
 **/**.code-workspace
-/src/__pycache__/**
-**.tar
-/venv
+processing_files/**/**
+static/combined/*
+static/pdbs/*
 config.ini
+venv/*
+**.tar

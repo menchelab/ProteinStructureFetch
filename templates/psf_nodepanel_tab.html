@@ -1,0 +1,78 @@
+<script src="{{ url_for('ProteinStructureFetch.static', filename='js/psf_util.js') }}">
+</script>
+</script>
+<script>
+    var sessionData = JSON.parse({{ sessionData| tojson}});
+    var settings_vrprot = sessionData.vrprot
+</script>
+<div id="tab_to_add" class="container" style="display:none;">
+    <h2 class="lineglowslow" style="font-size: 68px;margin-bottom:30px;margin-top:30px">Settings</h2>
+    <h6 style="font-size:25px;">Coloring mode:</h6>
+    <div id="psf_colormode_selector">
+        <select id="psf_mode">
+            <script>
+                psf_write_color_modes_ver()
+            </script>
+        </select>
+        <div class="twelve columns">
+            <div id="psf_mode_update_message" class="updateMessage">
+            </div>
+        </div>
+        <script>
+            psf_settings_selectmenus("psf_mode", "/vrprot/changeMode?mode=", "psf_mode_update_message", "mode")
+        </script>
+
+    </div>
+    <h6 style="font-size:25px;">AlphaFold DB version:</h6>
+    <div id="psf_alphafold_selector">
+        <select id="psf_alphafold_ver">
+            <script>
+                psf_write_alphafold_ver()
+            </script>
+        </select>
+        <div class="twelve columns">
+            <div id="psf_alphafold_ver_update_message" class="updateMessage">
+            </div>
+        </div>
+        <script>
+            psf_settings_selectmenus("psf_alphafold_ver", "/vrprot/changeAFVer?ver=", "psf_alphafold_ver_update_message", "alphafoldVersion")
+            // Keep version disabeld for now
+            $("#psf_alphafold_ver").selectmenu("disable");
+        </script>
+    </div>
+    <img id="tab_img" src="{{ url_for('static', filename='img/active_gears.png') }}" style="display: none;">
+    <div class="twelve columns">
+        <div class="frameBox three columns" id="psf_overwrite_framebox" style="height:88px;width:fit-content">
+            <h6 style="font-size:25px;">Overwrite</h6>
+        </div>
+        <div class="frameBox one columns" id="psf_overwrite_checkbox_framebox"
+            style="height: 88px;width: 88px;max-height:88px;padding:7px"> <input type="checkbox" id="psf_overwrite"
+                name="psf_overwrite" class="vr_checkbox">
+        </div>
+        <div class="ninecolumns">
+        </div>
+        <div class="twelve columns">
+            <div id="psf_overwrite_message" class="updateMessage">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        psf_settings_checkbox("psf_overwrite", "psf_overwrite_message", "overwrite", settings_vrprot.overwrite, "/vrprot/settings/overwrite?value=", "psf_overwrite_checkbox_framebox")
+        console.log("settings_vrprot.overwrite: " + settings_vrprot.overwrite)
+
+        var myTab = document.getElementById("psf_colormode_selector").parentNode;
+        if (typeof uniprot_ids === "undefined")
+            myTab.remove();
+    </script>
+
+
+    {% if "UnrealEngine" in request.user_agent|string%}
+    <!-- Larger dropdown items if in vr -->
+    <script>
+        psf_vr_selectmenu("psf_mode");
+        psf_vr_selectmenu("psf_alphafold_ver");
+
+    </script>
+    {% endif %}
+</div>

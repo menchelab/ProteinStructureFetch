@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/SwagStyle.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/UI_Module_Config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/connect_WebUI.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/mc_UI_Elements.js') }}"></script>
+    <script src="{{ url_for('ProteinStructureFetch.static', filename='js/psf_util.js') }}"></script>
+</head>
+
+<body>
+    {%include "NavBar.html" %}
+    <script>
+        let list = document.getElementsByClassName("twelve columns")
+        for (i = 0; i <= list.length; i++) {
+
+            if (list[i]) {
+                console.log(list[i])
+                list[i].style.height = "60px";
+            };
+        };
+    </script>
+    {%include "psf_nodepanel_tab.html" %}
+    <script>
+        document.getElementById("tab_to_add").style.display = "block";
+    </script>
+</body>
+
+</html>
