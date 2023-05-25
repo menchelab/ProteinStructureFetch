@@ -84,7 +84,7 @@ def setup() -> None:
     vrprot_config[CC.ParserKeys.overwrite] = st.config[CC.parser][
         CC.ParserKeys.overwrite
     ]
-    GD.sessionData["vrprot"] = vrprot_config
+    # GD.sessionData["vrprot"] = vrprot_config
     # with open(
     #     os.path.join(st._FLASK_TEMPLATE_PATH, "psf_nodepanel_tab_template.html"), "r"
     # ) as f:
