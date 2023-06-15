@@ -3,20 +3,21 @@ import json
 import os
 import sys
 
-from .classes import ConfigCategories as CC
-
 #################
 import flask
 import GlobalData as GD
+from io_blueprint import IOBlueprint
 from PIL import Image
 from vrprot.classes import AlphaFoldVersion, ColoringModes
-from io_blueprint import IOBlueprint
+
 from . import settings as st
 from . import util, workflows
+from .classes import ConfigCategories as CC
 from .util import time_ex
 
 url_prefix = "/vrprot"
 nodepanelppi_tabs = ["psf_nodepanel_tab.html"]
+column_3 = ["psf_panel.html"]
 
 
 blueprint = IOBlueprint(
@@ -156,3 +157,42 @@ def psf_settings() -> str:
 @blueprint.route("/update_uniprot", methods=["GET", "POST"])
 def psf_update_uniprot() -> str:
     return util.update_uniprot(flask.request)
+
+
+@blueprint.on("init")
+def psf_init_dd(message):
+    cm = ColoringModes.list_of_modes()
+    cm_selected = cm.index(st.parser.processing)
+    afv = AlphaFoldVersion.list_of_versions()
+    afv_selected = afv.index(st.parser.alphafold_ver)
+    initMessage = {
+        "cm": cm,
+        "cm_selected": cm_selected,
+        "afv": afv,
+        "afv_selected": afv_selected,
+        "overwrite": st.parser.overwrite,
+        "usr": message["usr"],
+    }
+    blueprint.emit(
+        "init",
+        initMessage,
+    )
+
+
+@blueprint.on("ex")
+def psf_incoming_ex(message):
+    id = message["id"]
+    fn = message["fn"]
+    print("incoming ex", message)
+    if fn == "dropdown":
+        msg = message["msg"]
+        message["value"] = msg
+        if id == "psf_af_ver":
+            util.change_alphafold_ver(msg)
+        elif id == "psf_color_mode":
+            util.change_mode(msg)
+    if fn == "checkbox":
+        val = message["val"]
+        if id == "psf_overwrite":
+            util.overwrite_settings(val)
+    blueprint.emit("ex", message)

@@ -1,0 +1,93 @@
+{%include "extensionTemplates.html" %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/exampleUtilities.js') }}"></script>
+
+<div id="psfSettingsPanel" class="gradientBox">
+    <div class='swagBox' style="width:420px; background-color: transparent;">
+
+        <h5 style="  float:left; font-size: 25px;  color: rgb(102, 102, 102); margin-top:5px; margin-bottom:5px;">
+            ProteinStructureFetch Settings</h5>
+        <div class="gradient"></div>
+        <div style=" margin-top:50px" id="psf">
+            <ext-dropdown name="Color Mode" id="psf_cm" type="dropdown" fn="dropdown"
+                socketDomain="vrprot"></ext-dropdown>
+            <h4 id="psf_mode_update_message" class="updateMessage">
+            </h4>
+
+            <ext-dropdown name="AlphaFold DB version" id="psf_af_ver" type="dropdown" fn="dropdown"
+                socketDomain="vrprot"></ext-dropdown>
+            <h4 id="psf_alphafold_ver_update_message" class="updateMessage">
+            </h4>
+
+            <ext-CheckBox id="psf_overwrite" name="Overwrite" socketDomain="vrprot">
+            </ext-CheckBox>
+
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            var psf_cm_dd = document.getElementById("psf_cm");
+            var psf_cm_um = document.getElementById("psf_mode_update_message");
+            var psf_af_ver_dd = document.getElementById("psf_af_ver");
+            var psf_af_ver_um = document.getElementById("psf_alphafold_ver_update_message");
+            var psf_overwrite = document.getElementById("psf_overwrite").shadowRoot.querySelector("#box");
+
+            psfSocket = io.connect("http://" + location.host + "/vrprot");
+
+            psfSocket.emit("init", {
+                usr: uid
+            });
+
+            psfSocket.on("init", function(message) {
+                if (message.usr != uid)
+                    return;
+
+                var data = { id: "psf_cm", socketDomain: "vrprot", opt: message.cm, sel: message.cm_selected, parent: "psf_cm" }
+                initExtDropdown(data);
+
+                data.id = "psf_af_ver";
+                data.opt = message.afv;
+                data.sel = message.afv_selected;
+                data.parent = "psf_af_ver";
+                initExtDropdown(data);
+                console.log(message.overwrite)
+                if ([true, "true", "True"].includes(message.overwrite)) {
+                    psf_overwrite.checked = true;
+                } else {
+                    psf_overwrite.checked = false;
+                }
+
+            });
+            psfSocket.on("ex", function(message) {
+                switch (message.id) {
+                    case "psf_cm":
+                        dd_sel = psf_cm_dd.shadowRoot.querySelector("#sel");
+                        dd_sel.value = message.value;
+                        psf_cm_dd.shadowRoot.getElementById("content").style.display = "none";
+                        updateMessage = "Updated to " + message.value + "!"
+                        setUpdateMessage(psf_cm_um, undefined, updateMessage);
+                        break;
+
+                    case "psf_af_ver":
+                        dd_sel = psf_af_ver_dd.shadowRoot.querySelector("#sel");
+                        dd_sel.value = message.value;
+                        psf_af_ver_dd.shadowRoot.getElementById("content").style.display = "none";
+                        updateMessage = "Updated to " + message.value + "!"
+                        setUpdateMessage(psf_af_ver_um, undefined, updateMessage);
+                        break;
+                    case "psf_overwrite":
+                        console.log(message.val)
+                        if (message.usr == uid)
+                            break;
+                        if ([true, "true", "True"].includes(message.val)) {
+                            psf_overwrite.checked = true;
+                        } else {
+                            psf_overwrite.checked = false;
+                        }
+                        break;
+                }
+            });
+        });
+
+    </script>
+</div>

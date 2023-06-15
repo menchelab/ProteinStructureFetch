@@ -1,6 +1,7 @@
 import json
 import os
 import time
+
 import flask
 import GlobalData as GD
 from vrprot.alphafold_db_parser import AlphafoldDBParser
@@ -165,3 +166,34 @@ def update_uniprot(request: flask.request):
                         json.dump(names, f)
 
     return json.dumps(updated)
+
+
+def change_mode(mode: str):
+    """Changes the coloring mode which is used during the ChimeraX processing.
+
+    Args:
+        mode (str): The mode to change to.
+    """
+    st.parser.processing = mode
+    write_to_config(CC.parser, CC.ParserKeys.colorMode, mode)
+
+
+def change_alphafold_ver(ver: str):
+    """Changes the version of the AlphaFold database from which the structures are fetched from.
+
+    Args:
+        ver (str): Version of the AlphaFold database.
+    """
+    st.parser.alphafold_ver = ver
+    write_to_config(CC.parser, CC.ParserKeys.alphafoldVersion, ver)
+
+
+def overwrite_settings(value: str or bool):
+    """Turns on or off the overwrite mode.
+
+    Args:
+        value (str): Value to which the overwrite mode should be set to.
+    """
+
+    st.parser.overwrite = bool(value)
+    write_to_config(CC.parser, CC.ParserKeys.overwrite, value)
